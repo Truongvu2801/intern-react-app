@@ -7,9 +7,9 @@ import ItemDetail from '../src/page/ItemDetail/ItemDetail';
 function App() {
   return (
     <div>
-      {/* <AppIndex/> */}
+      <AppIndex/>
       {/* <ListItems/> */}
-      <ItemDetail/>
+      {/* <ItemDetail/> */}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import itemReducer from './itemReducer';
+import postReducer from './postReducer';
 
 const appReducers = combineReducers({
-    itemReducer
+    postReducer
 });
 
 export default appReducers;

@@ -1,8 +1,34 @@
 import React, { Component } from 'react';
-// import './style.scss';
-
+import {connect} from 'react-redux';
+import { actSearchPostRequest } from '../../actions/index';
 export class App extends Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			keyword: ''
+		}
+	}
+
+	onChange = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.type === 'checkbox' ? target.checked : target.value;
+        this.setState({
+            [name]: value
+        }, () => {
+			this.props.onSearchPost(this.state.keyword)
+		});
+	}
+	
+	// keyPressed(event) {
+	// 	if (event.key === "Enter") {
+	// 	  this.props.onSearchPost(this.state.keyword)
+	// 	}
+	// }
+
 	render() {
+		console.log(this.state.keyword);
+		console.log(this.props);
 		return (
 			<div className="section-homepage">
 				<div className="container-fluid homepage__container">
@@ -12,8 +38,8 @@ export class App extends Component {
 								<div className="d-flex align-items-center hp-header-top__container lh-top__container">
 									<div className="ml-auto hp-header-top__menu lh-top__menu">
 										<div className="d-flex align-items-center ht-menu__items">
-											<div className="ht-menu--item"><a href="/ket-qua/thong-tin">Th&ocirc;ng tin</a></div>
-											<div className="ht-menu--item"><a href="/ban-do">B&#/x1EA3;n &dstrok;&#/x1ED3;</a></div>
+											<div className="ht-menu--item"><a href="#/">Thông tin</a></div>
+											<div className="ht-menu--item"><a href="#/">B&#/x1EA3;n &dstrok;&#/x1ED3;</a></div>
 											<div className="ht-menu--item"><a href="#/">B&#/x1EA3;ng gi&aacute;</a></div>
 											<div className="ht-menu--item dropdown">
 												<div className="dropdown-toggle" data-toggle="dropdown">Th&ecirc;m</div>
@@ -101,7 +127,9 @@ export class App extends Component {
 									<div className="homepage--input-search">
 										<div className="input-search__container d-flex justify-content-center">
 											<div className="w-100 input-search__content collapsed" id="autoComplete__content">
-												<input className="form-control" id="autoComplete" type="text" placeholder="Search ..." tabindex="1" />
+												<input className="form-control" id="autoComplete" type="text" name="keyword" placeholder="Search ..." tabindex="1" onChange={this.onChange}
+												//  onKeyPress={this.keyPressed}
+												/>
 											</div>
 										</div>
 									</div>
@@ -135,7 +163,7 @@ export class App extends Component {
                                           sollicitudin, lorem quis biben <a href="#/">Xem nhanh</a></span></div>
 								<div className="quick-view__content d-inline-flex"><span><span className="quick-view--title">Tin nhanh 2: </span> Lorem Ipsum. Proin gravida nibh vel velit
 																				auctor aliquet. Aenean
-                                          sollicitudin, lorem quis biben <a href="#//">Xem nhanh</a></span></div>
+                                          sollicitudin, lorem quis biben <a href="#/">Xem nhanh</a></span></div>
 							</div>
 						</div>
 					</div>
@@ -145,5 +173,17 @@ export class App extends Component {
 	}
 }
 
+// const mapStateToProps = (state) => {
 
-export default App;
+// }
+
+const mapDispathToProps = (dispatch, props) => {
+	return {
+		onSearchPost: (keyword) => {
+			dispatch(actSearchPostRequest(keyword))
+		}
+	}
+}
+
+
+export default connect(null, mapDispathToProps)(App);

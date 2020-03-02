@@ -1,1 +1,1 @@
-export const API_URL = '';
+export const API_URL = 'https://api.asset.vn/api/v1';

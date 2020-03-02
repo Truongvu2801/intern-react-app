@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Item from '../Item/Item';
+
 
 class ListItems extends Component {
 	render() {
@@ -127,4 +129,16 @@ class ListItems extends Component {
 	}
 }
 
-export default ListItems;
+const mapStateToProps = (state) => {
+	return {
+		// listPosts: state.
+	}
+}
+
+// const mapDispatchToProps = (dispatch, props) => {
+// 	return {
+
+// 	}
+// }
+
+export default connect(mapStateToProps, null)(ListItems);
