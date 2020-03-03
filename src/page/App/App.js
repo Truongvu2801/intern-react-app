@@ -1,34 +1,62 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import { actSearchPostRequest } from '../../actions/index';
+import { connect } from 'react-redux';
+import { actSearchPostRequest, actSearchPostByKeyWordRequest } from '../../actions/index';
 export class App extends Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			keyword: ''
-		}
+		};
 	}
 
 	onChange = (e) => {
-        var target = e.target;
-        var name = target.name;
-        var value = target.type === 'checkbox' ? target.checked : target.value;
-        this.setState({
-            [name]: value
-        }, () => {
-			this.props.onSearchPost(this.state.keyword)
+		var target = e.target;
+		var name = target.name;
+		var value = target.type === 'checkbox' ? target.checked : target.value;
+		this.setState({
+			[name]: value
+		}, () => {
+			this.props.onSearchPost(this.state.keyword);
 		});
 	}
-	
-	// keyPressed(event) {
-	// 	if (event.key === "Enter") {
-	// 	  this.props.onSearchPost(this.state.keyword)
-	// 	}
-	// }
+
+	keyPressed(event) {
+		if (event.key === 'Enter') {
+			this.props.onSearchPostByKeyWord(this.state.keyword);
+		}
+	}
+
+	renderInputSearch = () => {
+		const listSuggestionPosts = this.props.listSuggestion.postReducer;
+
+		if (listSuggestionPosts.length > 0) {
+			return (
+				<div className="w-100 input-search__content expanded" id="autoComplete__content">
+					<input className="form-control" id="autoComplete" type="text" name="keyword" placeholder="Search ..." tabindex="1" onChange={this.onChange}
+						onKeyPress={this.keyPressed}
+					/>
+					<ul id="autoComplete_results_list">
+						{
+							listSuggestionPosts.map(post => {
+								return (
+									<li className="row-item-suggestion-popup d-flex">{post.title}</li>
+								);
+							})
+						}
+					</ul>
+				</div>
+			);
+		}
+		return (
+			<div className="w-100 input-search__content collapsed" id="autoComplete__content">
+				<input className="form-control" id="autoComplete" type="text" name="keyword" placeholder="Search ..." tabindex="1" onChange={this.onChange}
+					onKeyPress={this.keyPressed}
+				/>
+			</div>
+		);
+	}
 
 	render() {
-		console.log(this.state.keyword);
-		console.log(this.props);
 		return (
 			<div className="section-homepage">
 				<div className="container-fluid homepage__container">
@@ -39,8 +67,8 @@ export class App extends Component {
 									<div className="ml-auto hp-header-top__menu lh-top__menu">
 										<div className="d-flex align-items-center ht-menu__items">
 											<div className="ht-menu--item"><a href="#/">Thông tin</a></div>
-											<div className="ht-menu--item"><a href="#/">B&#/x1EA3;n &dstrok;&#/x1ED3;</a></div>
-											<div className="ht-menu--item"><a href="#/">B&#/x1EA3;ng gi&aacute;</a></div>
+											<div className="ht-menu--item"><a href="#/">Bản đồ</a></div>
+											<div className="ht-menu--item"><a href="#/">Bảng giá</a></div>
 											<div className="ht-menu--item dropdown">
 												<div className="dropdown-toggle" data-toggle="dropdown">Th&ecirc;m</div>
 												<div className="dropdown-menu ht-menu__add">
@@ -62,7 +90,7 @@ export class App extends Component {
 											<div className="ht-menu--item">
 												<div className="ht__menu-notify"><a href="#/"><img className="ht-menu--icon" src="../../assets/img/Group 22.png" alt="" /></a></div>
 											</div>
-											<div className="ht-menu--item"><a className="ht-menu__login menu-tools--btn-login btn btn-primary" href="/dang-nhap">&Dstrok;&abreve;ng nh&#/x1EAD;p</a></div>
+											<div className="ht-menu--item"><a className="ht-menu__login menu-tools--btn-login btn btn-primary" href="/dang-nhap">Đăng nhập</a></div>
 										</div>
 									</div>
 								</div>
@@ -126,11 +154,7 @@ export class App extends Component {
 									</div>
 									<div className="homepage--input-search">
 										<div className="input-search__container d-flex justify-content-center">
-											<div className="w-100 input-search__content collapsed" id="autoComplete__content">
-												<input className="form-control" id="autoComplete" type="text" name="keyword" placeholder="Search ..." tabindex="1" onChange={this.onChange}
-												//  onKeyPress={this.keyPressed}
-												/>
-											</div>
+											{this.renderInputSearch()}
 										</div>
 									</div>
 								</div>
@@ -141,8 +165,8 @@ export class App extends Component {
 				<div className="homepage__footer layout-footer">
 					<div className="homepage__footer-container">
 						<div className="hp-footer__links layout-footer__links d-flex justify-content-center justify-content-lg-start">
-							<div className="hp-footer--link layout-footer--link"><a href="#/">Gi&#/x1EDB;i thi&#/x1EC7;u</a></div>
-							<div className="hp-footer--link layout-footer--link"><a href="#/">H&#/x1B0;&#/x1EDB;ng d&#/x1EAB;n</a></div>
+							<div className="hp-footer--link layout-footer--link"><a href="#/">Giới thiệu</a></div>
+							<div className="hp-footer--link layout-footer--link"><a href="#/">Hướng dẫn</a></div>
 						</div>
 						<div className="hp-footer__quick-views layout-footer__quick-views d-none d-lg-flex">
 							<div className="hp-footer__quick-view layout-footer--quick-view w-50">
@@ -173,17 +197,23 @@ export class App extends Component {
 	}
 }
 
-// const mapStateToProps = (state) => {
-
-// }
+const mapStateToProps = (state) => {
+	console.log('state: ', state);
+	return {
+		listSuggestion: state
+	};
+};
 
 const mapDispathToProps = (dispatch, props) => {
 	return {
 		onSearchPost: (keyword) => {
-			dispatch(actSearchPostRequest(keyword))
+			dispatch(actSearchPostRequest(keyword));
+		},
+		onSearchPostByKeyWord: (keyword) => {
+			dispatch(actSearchPostByKeyWordRequest(keyword));
 		}
-	}
-}
+	};
+};
 
 
-export default connect(null, mapDispathToProps)(App);
+export default connect(mapStateToProps, mapDispathToProps)(App);

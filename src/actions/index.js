@@ -19,7 +19,7 @@ export const actFetchPosts = (posts) => {
 export const actSearchPostRequest = (keyword) => {
     console.log('keyword: ', keyword);
     return (dispatch) => {
-        return callApi(`search/suggestion?keyword=${keyword}`, 'POST', null).then(res => {
+        return callApi(`search/suggestion?keyword=${keyword}`, 'GET', null).then(res => {
             dispatch(actSearchPost(res.data))
         })
     }
@@ -31,3 +31,31 @@ export const actSearchPost = (posts) => {
         posts
     }
 }
+
+export const actSearchPostByKeyWordRequest = (keyword) => {
+    return (dispatch) => {
+        return callApi(`search/get_post_by_keyword?keyword=${keyword}`, 'GET', null).then(res => {
+            dispatch(actSearchPostByKeyWord(res.data))
+        })
+    }
+}
+
+export const actSearchPostByKeyWord = (posts) => {
+    return {
+        type: Types.SEARCH_POST_BY_KeyWord,
+        posts
+    }
+}
+
+// export const actGetPostRequest = () => {
+//     return (dispatch) => {
+//         return callApi()
+//     }
+// }
+
+// export const actGetPost = () => {
+//   return {
+//       type: Types.GET_POST,
+//       post
+//   }  
+// }
