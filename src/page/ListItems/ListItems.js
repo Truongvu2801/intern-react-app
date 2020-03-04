@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import Item from "../Item/Item";
 import { actSearchPostByKeyWordRequest } from "../../actions/index";
 class ListItems extends Component {
@@ -210,8 +211,13 @@ class ListItems extends Component {
                     </div>
                   </div>
                 </div>
+
                 {this.state.listPosts.map(post => {
-                  return <Item post={post} />;
+                  return (
+                    <NavLink to={`/posts/detail?id=${post.rel_id}`}>
+                      <Item post={post} />;
+                    </NavLink>
+                  );
                 })}
               </div>
             </div>
@@ -258,7 +264,7 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
-	  return {
+  return {
     listPosts: state
   };
 };

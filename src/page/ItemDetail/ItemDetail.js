@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 
 class ItemDetail extends Component {
 	render() {
-		console.log(this.props);
 		return (
 			<section className="News-Detail-Page">
 				{/* <!-- Button to Open the Modal --> */}
