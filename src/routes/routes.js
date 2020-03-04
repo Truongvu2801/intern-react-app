@@ -1,18 +1,24 @@
 import React from 'react';
-import { App } from "../page/App/App";
+import App  from "../page/App/App";
 import ListItems from '../page/ListItems/ListItems';
+import ItemDetail from '../page/ItemDetail/ItemDetail';
 
 const routes = [
     {
         path: '/',
         exact: true,
-        main: () => <App/>
+        component: App
     },
     {
-        path: '/listItems',
+        path: '/posts/:keyword',
         exact: false,
-        main: () => <ListItems/>
+        component: ListItems
     },
+    {
+        path: '/posts/detail',
+        exact: false,
+        component: ItemDetail
+    }
 
 ]
 

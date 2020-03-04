@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 
 class Item extends Component {
+    constructor(props){
+        super(props);
+    }
+
     render() {
+        const {post} = this.props;
         return (
             <div className="rp-search-result__items">
                 {/* <!-- SEARCH RESULT ITEM--> */}
@@ -16,7 +21,7 @@ class Item extends Component {
                             <div className="item-details__container">
                                 <div className="item-details__title">
                                     <div className="ids-title__content">
-                                        <div className="ids-title--header d-flex"><a className="title--name" href="#">Asset News</a>
+                                        <div className="ids-title--header d-flex"><a className="title--name" href="#">{post.title}</a>
                                             <div className="title--rate d-flex align-items-center"><span>[Chung
                                         c&#x1B0; </span><span className="title_rate--highlight">
                                                     4,5+ </span><img src="../../assets/img/star.png" alt="" />]</div>
@@ -29,22 +34,9 @@ class Item extends Component {
                                     </div>
                                 </div>
                                 <div className="item-details__post">
-                                    <div className="ids-post--title"><a href="#">T&ograve;a nh&agrave; L&yacute;
-                                                    Ch&iacute;nh Th&#x1EAF;ng &dstrok;ang trong giai
-                                &dstrok;o&#x1EA1;n ho&agrave;n thi&#x1EC7;n</a></div>
+                                    <div className="ids-post--title"><a href="#">{post.sub_title}</a></div>
                                     <div className="ids-post--content"><span>
-                                        Ng&agrave;y 10-12/05: C&oacute; 123 th&ocirc;ng b&aacute;o
-                                        k&#x1EBF; ho&#x1EA1;ch l&#x1EF1;a ch&#x1ECD;n nh&agrave;
-                                        th&#x1EA7;u ch&#x1EAD;m .... 1527/Q&Dstrok;-UBND ng&agrave;y
-                                        14/02/2019; KHLCNT c&#x1EE7;a Ban Qu&#x1EA3;n l&yacute;
-                                        d&#x1EF1; &aacute;n &dstrok;&#x1EA7;u t&#x1B0; x&acirc;y ....
-                                        KHLCNT c&#x1EE7;a S&#x1EDF; T&agrave;i ch&iacute;nh t&#x1EC9;nh
-                                        H&#x1B0;ng
-                                        &mldr;. cho d&#x1EF1; &aacute;n &ldquo;Mua s&#x1EAF;m
-                                        thi&#x1EBF;t b&#x1ECB; &dstrok;&#x1ECB;nh .... H&#x1EA1;ng
-                                        m&#x1EE5;c: X&oacute;m Ao V&agrave;ng, C&#x1ED5; R&ugrave;a,
-                                        G&ograve; Ch&egrave;, Ph&uacute;c L&#x1ED9;c,
-                                Quy&#x1EBF;t Th&#x1EAF;ng, T&acirc;n ...</span></div>
+                                      {post.search}</span></div>
                                 </div>
                                 <div className="item-details__actions">
                                     <div className="action-buttons-bottom">

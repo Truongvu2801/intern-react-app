@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
 class ItemDetail extends Component {
 	render() {
+		console.log(this.props);
 		return (
 			<section className="News-Detail-Page">
 				{/* <!-- Button to Open the Modal --> */}
@@ -294,4 +296,15 @@ class ItemDetail extends Component {
 	}
 }
 
-export default ItemDetail;
+const mapStateToProps = state => {
+	return {
+
+	}	
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+	
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);

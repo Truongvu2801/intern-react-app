@@ -1,23 +1,22 @@
 import * as Types from '../constants/ActionTypes';
 import callApi from '../utils/apiHelper';
 
-export const actFetchPostsRequest = () => {
+export const actGetPostByIdRequest = (id) => {
     return (dispatch) => {
-        return callApi('search/post', 'GET', null).then(res => {
-            dispatch(actFetchPosts(res.data));
+        return callApi(`post/get_by_id?id=${id}`, 'GET', null).then(res => {
+            dispatch(actGetPostById(res.data));
         });
     }
 }
 
-export const actFetchPosts = (posts) => {
+export const actGetPostById = (post) => {
     return {
         type: Types.FETCH_POST,
-        posts
+        post
     }
 }
 
 export const actSearchPostRequest = (keyword) => {
-    console.log('keyword: ', keyword);
     return (dispatch) => {
         return callApi(`search/suggestion?keyword=${keyword}`, 'GET', null).then(res => {
             dispatch(actSearchPost(res.data))
@@ -42,20 +41,8 @@ export const actSearchPostByKeyWordRequest = (keyword) => {
 
 export const actSearchPostByKeyWord = (posts) => {
     return {
-        type: Types.SEARCH_POST_BY_KeyWord,
+        type: Types.SEARCH_POST_BY_KEYWORD,
         posts
     }
 }
 
-// export const actGetPostRequest = () => {
-//     return (dispatch) => {
-//         return callApi()
-//     }
-// }
-
-// export const actGetPost = () => {
-//   return {
-//       type: Types.GET_POST,
-//       post
-//   }  
-// }
