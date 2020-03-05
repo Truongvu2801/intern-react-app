@@ -21,7 +21,7 @@ class Item extends Component {
                             <div className="item-details__container">
                                 <div className="item-details__title">
                                     <div className="ids-title__content">
-                                        <div className="ids-title--header d-flex"><a className="title--name" href="#">{post.title}</a>
+                                        <div className="ids-title--header d-flex"><a className="title--name" href="#">{post.name}</a>
                                             <div className="title--rate d-flex align-items-center"><span>[Chung
                                         c&#x1B0; </span><span className="title_rate--highlight">
                                                     4,5+ </span><img src="../../assets/img/star.png" alt="" />]</div>

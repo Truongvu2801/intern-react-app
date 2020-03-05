@@ -2,32 +2,64 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import Item from "../Item/Item";
-import { actSearchPostByKeyWordRequest } from "../../actions/index";
+import {
+  actSearchPostByKeyWordRequest,
+  actCountAllPostsRequest
+} from "../../actions/index";
+import Pagination from "../Pagination/Pagination";
 class ListItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listPosts: []
+      listPosts: [],
+      currentPage: 1,
+      postPerPage: 10,
+      totalPost: 1
     };
   }
 
   componentDidMount() {
     this.getPostByKeyword();
+    this.getTotalPost();
   }
 
-  getPostByKeyword = async () => {
+  getPostByKeyword = (pageNumber) => {
     const paramUrl = this.props.match.params.keyword;
-    await this.props.onSearchPostByKeyWord(paramUrl);
+    this.props.onSearchPostByKeyWord(paramUrl, pageNumber);
     this.setState({
-      listPosts: this.props.listPosts.postReducer
+      listPosts: this.props.listPosts
     });
   };
 
-  getDerivedStateFromProps(nextProps, prevState) {
-    console.log("nextProps: ", nextProps);
+  getTotalPost(){
+    const paramUrl = this.props.match.params.keyword;
+    this.props.onCountTotalPosts(paramUrl);
+  };
+
+  static getDerivedStateFromProps(props, state) {
+	  console.log('props ne', props);
+	  
+    if (state.totalPost !== props.getNumberPost) {
+      return {
+		totalPost: props.getNumberPost,
+      };
+	}
+	return null
   }
 
+  paginate (pageNumber) {
+	this.setState({
+		currentPage: pageNumber
+	}, () => this.getPostByKeyword(this.state.currentPage))
+  }
+//   abc = (value) => {
+// 	  this.setState({
+// 		listPosts: value,
+// 	  })
+//   }
   render() {
+    // console.log("aaaaa", this.state.currentPage);
+	// {this.props.listPosts && abc(this.props.listPosts)}
     return (
       <section className="section__result-pages">
         <div className="container-fluid result-pages__container">
@@ -139,7 +171,7 @@ class ListItems extends Component {
                 <div className="rp-header-navigation header-navigation__container">
                   <div className="header-navigation__items d-flex">
                     <div className="header-navigation--item is-actived">
-                      <a className="hn-item--text" href="#/">
+                      <a className="hn-item--text" href="/#">
                         T&#x1EA5;t c&#x1EA3;
                       </a>
                     </div>
@@ -212,50 +244,21 @@ class ListItems extends Component {
                   </div>
                 </div>
 
-                {this.state.listPosts.map(post => {
+                { this.state.listPosts && this.state.listPosts.map(post => {
                   return (
-                    <NavLink to={`/posts/detail?id=${post.rel_id}`}>
+                    <NavLink to={`/posts/detail?id=${post.rel_id}&page=${this.state.currentPage}`}>
                       <Item post={post} />;
                     </NavLink>
                   );
                 })}
               </div>
             </div>
-            <div className="rp-search-result__pagination">
-              <div className="search-result__pagination-container container">
-                <div className="search-result__pagination-content d-flex align-items-center justify-content-center justify-content-sm-end">
-                  <a
-                    className="sr-pagination--btn sr-pagination--previous"
-                    href="#"
-                  >
-                    Tr&#x1B0;&#x1EDB;c
-                  </a>
-                  <div className="sr-pagination__items d-flex align-items-center">
-                    <a className="sr-pagination--item is-actived" href="#">
-                      1
-                    </a>
-                    <a className="sr-pagination--item" href="#">
-                      2
-                    </a>
-                    <a className="sr-pagination--item" href="#">
-                      3
-                    </a>
-                    <a className="sr-pagination--item" href="#">
-                      4
-                    </a>
-                    <a className="sr-pagination--item" href="#">
-                      5
-                    </a>
-                  </div>
-                  <a
-                    className="sr-pagination--btn sr-pagination--next"
-                    href="#"
-                  >
-                    Ti&#x1EBF;p
-                  </a>
-                </div>
-              </div>
-            </div>
+            <Pagination 
+				total={this.state.totalPost}
+				postPerPage={this.state.postPerPage}
+				currentPage={this.state.currentPage}
+				paginate ={(pageNumber) => this.paginate(pageNumber)}
+			/>
           </div>
         </div>
       </section>
@@ -264,15 +267,20 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
+	console.log('state nee ', state);
   return {
-    listPosts: state
+    listPosts: state.postReducer.posts,
+    getNumberPost: state.postReducer.totalPost
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onSearchPostByKeyWord: keyword => {
-      dispatch(actSearchPostByKeyWordRequest(keyword));
+    onSearchPostByKeyWord: (keyword, pageNumber) => {
+      dispatch(actSearchPostByKeyWordRequest(keyword, pageNumber));
+    },
+    onCountTotalPosts: keyword => {
+      dispatch(actCountAllPostsRequest(keyword));
     }
   };
 };

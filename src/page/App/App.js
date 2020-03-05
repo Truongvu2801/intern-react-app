@@ -39,7 +39,7 @@ export class App extends Component {
   };
 
   renderSearchSuggestion = () => {
-    const listSuggestionPosts = this.props.listSuggestion.postReducer;
+    const listSuggestionPosts = this.props.listSuggestion;
     return (
       <ul id="autoComplete_results_list">
         {listSuggestionPosts.length > 0
@@ -72,13 +72,13 @@ export class App extends Component {
                   <div className="ml-auto hp-header-top__menu lh-top__menu">
                     <div className="d-flex align-items-center ht-menu__items">
                       <div className="ht-menu--item">
-                        <a href="#/">Thông tin</a>
+                        <a href="/#">Thông tin</a>
                       </div>
                       <div className="ht-menu--item">
-                        <a href="#/">Bản đồ</a>
+                        <a href="/#">Bản đồ</a>
                       </div>
                       <div className="ht-menu--item">
-                        <a href="#/">Bảng giá</a>
+                        <a href="/#">Bảng giá</a>
                       </div>
                       <div className="ht-menu--item dropdown">
                         <div className="dropdown-toggle" data-toggle="dropdown">
@@ -86,13 +86,13 @@ export class App extends Component {
                         </div>
                         <div className="dropdown-menu ht-menu__add">
                           <div className="dropdown-item">
-                            <a href="#/">Danh b&#/x1EA1;</a>
+                            <a href="/#">Danh b&#/x1EA1;</a>
                           </div>
                           <div className="dropdown-item">
-                            <a href="#/">T&agrave;i nguy&ecirc;n</a>
+                            <a href="/#">T&agrave;i nguy&ecirc;n</a>
                           </div>
                           <div className="dropdown-item">
-                            <a href="#/">H&#/x1ECF;i &dstrok;&aacute;p</a>
+                            <a href="/#">H&#/x1ECF;i &dstrok;&aacute;p</a>
                           </div>
                         </div>
                       </div>
@@ -132,7 +132,7 @@ export class App extends Component {
                             </a>
                           </div>
                           <div className="mt--dropdown-item dropdown-item">
-                            <a href="#/">
+                            <a href="/#">
                               <img
                                 src="../../assets/img/baseline-monetization_on-24px.png"
                                 alt=""
@@ -146,7 +146,7 @@ export class App extends Component {
                       </div>
                       <div className="ht-menu--item">
                         <div className="ht__menu-notify">
-                          <a href="#/">
+                          <a href="/#">
                             <img
                               className="ht-menu--icon"
                               src="../../assets/img/Group 22.png"
@@ -214,13 +214,13 @@ export class App extends Component {
                               </a>
                             </div>
                             <div className="navbar--item">
-                              <a href="#/">Danh b&#/x1EA1;</a>
+                              <a href="/#">Danh b&#/x1EA1;</a>
                             </div>
                             <div className="navbar--item">
-                              <a href="#/">T&agrave;i nguy&ecirc;n</a>
+                              <a href="/#">T&agrave;i nguy&ecirc;n</a>
                             </div>
                             <div className="navbar--item">
-                              <a href="#/">H&#/x1ECF;i &dstrok;&aacute;p</a>
+                              <a href="/#">H&#/x1ECF;i &dstrok;&aacute;p</a>
                             </div>
                           </div>
                         </div>
@@ -243,7 +243,7 @@ export class App extends Component {
                   </div>
                   <div className="dropdown-menu menu-tool">
                     <div className="dropdown-item">
-                      <a href="#/">
+                      <a href="/#">
                         <img src="../../assets/img/Group 1569.png" alt="" />
                         <span className="menu-tool--text">
                           T&iacute;nh to&aacute;n kho&#/x1EA3;n vay
@@ -251,7 +251,7 @@ export class App extends Component {
                       </a>
                     </div>
                     <div className="dropdown-item">
-                      <a href="#/">
+                      <a href="/#">
                         <img
                           src="../../assets/img/baseline-insert_chart-24px.png"
                           alt=""
@@ -263,7 +263,7 @@ export class App extends Component {
                       </a>
                     </div>
                     <div className="dropdown-item">
-                      <a href="#/">
+                      <a href="/#">
                         <img
                           src="../../assets/img/baseline-monetization_on-24px.png"
                           alt=""
@@ -277,7 +277,7 @@ export class App extends Component {
                 </div>
                 <div className="menu_mobile--item">
                   <div className="menu-notify">
-                    <a className="d-flex" href="#/">
+                    <a className="d-flex" href="/#">
                       <img
                         className="img_menu"
                         src="../../assets/img/Group 22.png"
@@ -316,7 +316,7 @@ export class App extends Component {
                     <div className="input-search__container d-flex justify-content-center">
                       <div
                         className={`w-100 input-search__content ${
-                          this.props.listSuggestion.postReducer.length > 0
+                          this.props.listSuggestion.length > 0
                             ? "expanded"
                             : "collapsed"
                         }`}
@@ -345,10 +345,10 @@ export class App extends Component {
           <div className="homepage__footer-container">
             <div className="hp-footer__links layout-footer__links d-flex justify-content-center justify-content-lg-start">
               <div className="hp-footer--link layout-footer--link">
-                <a href="#/">Giới thiệu</a>
+                <a href="/#">Giới thiệu</a>
               </div>
               <div className="hp-footer--link layout-footer--link">
-                <a href="#/">Hướng dẫn</a>
+                <a href="/#">Hướng dẫn</a>
               </div>
             </div>
             <div className="hp-footer__quick-views layout-footer__quick-views d-none d-lg-flex">
@@ -358,7 +358,7 @@ export class App extends Component {
                     <span className="quick-view--title">Tin nhanh 1: </span>{" "}
                     Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
                     Aenean sollicitudin, lorem quis biben{" "}
-                    <a href="#/">Xem nhanh</a>
+                    <a href="/#">Xem nhanh</a>
                   </span>
                 </div>
               </div>
@@ -368,7 +368,7 @@ export class App extends Component {
                     <span className="quick-view--title">Tin nhanh 2: </span>{" "}
                     Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
                     Aenean sollicitudin, lorem quis biben{" "}
-                    <a href="#/">Xem nhanh</a>
+                    <a href="/#">Xem nhanh</a>
                   </span>
                 </div>
               </div>
@@ -380,7 +380,7 @@ export class App extends Component {
                     <span className="quick-view--title">Tin nhanh 1: </span>{" "}
                     Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
                     Aenean sollicitudin, lorem quis biben{" "}
-                    <a href="#/">Xem nhanh</a>
+                    <a href="/#">Xem nhanh</a>
                   </span>
                 </div>
                 <div className="quick-view__content d-inline-flex">
@@ -388,7 +388,7 @@ export class App extends Component {
                     <span className="quick-view--title">Tin nhanh 2: </span>{" "}
                     Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
                     Aenean sollicitudin, lorem quis biben{" "}
-                    <a href="#/">Xem nhanh</a>
+                    <a href="/#">Xem nhanh</a>
                   </span>
                 </div>
               </div>
@@ -403,7 +403,7 @@ export class App extends Component {
 const mapStateToProps = state => {
   console.log("state: ", state);
   return {
-    listSuggestion: state
+    listSuggestion: state.postReducer.searchSuggestion
   };
 };
 

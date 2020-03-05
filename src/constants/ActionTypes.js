@@ -2,3 +2,5 @@ export const FETCH_POST = 'FETCH_POST';
 export const SEARCH_POST = ' SEARCH_POST';
 export const GET_POST_BY_ID = 'GET_POST_BY_ID';
 export const SEARCH_POST_BY_KEYWORD = 'SEARCH_POST_BY_KEYWORD';
+export const COUNT_ALL_POSTS = 'COUNT_ALL_POSTS';
+

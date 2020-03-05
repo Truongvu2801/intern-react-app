@@ -18,7 +18,7 @@ export const actGetPostById = (post) => {
 
 export const actSearchPostRequest = (keyword) => {
     return (dispatch) => {
-        return callApi(`search/suggestion?keyword=${keyword}`, 'GET', null).then(res => {
+        return callApi(`search/suggestion?keyword=${keyword}`, 'GET', null).then(res => {   
             dispatch(actSearchPost(res.data))
         })
     }
@@ -31,18 +31,40 @@ export const actSearchPost = (posts) => {
     }
 }
 
-export const actSearchPostByKeyWordRequest = (keyword) => {
+export const actSearchPostByKeyWordRequest = (keyword, pageNumber) => {
+    console.log(keyword);
+    console.log(pageNumber);
     return (dispatch) => {
-        return callApi(`search/get_post_by_keyword?keyword=${keyword}`, 'GET', null).then(res => {
-            dispatch(actSearchPostByKeyWord(res.data))
+        return callApi(`search/get_post_by_keyword?keyword=${keyword}&page=${pageNumber}`, 'GET', null).then(res => {
+            if (res) {
+                dispatch(actSearchPostByKeyWord(res.data))
+            }
         })
     }
 }
 
-export const actSearchPostByKeyWord = (posts) => {
+export const actSearchPostByKeyWord = (data) => {
+    console.log('data: ', data);
     return {
         type: Types.SEARCH_POST_BY_KEYWORD,
-        posts
+        data
     }
 }
 
+export const actCountAllPostsRequest = (keyword) => {
+    return (dispatch) => {
+        return callApi(`search/count_by_keyword?keyword=${keyword}`, 'GET', null).then(res => {
+            if (res) {
+                console.log(res.data);
+                dispatch(actCountAllPosts(res.data))
+            }
+        })
+    }
+}
+
+export const actCountAllPosts = (number) => {
+    return {
+        type: Types.COUNT_ALL_POSTS,
+        number
+    }
+}
