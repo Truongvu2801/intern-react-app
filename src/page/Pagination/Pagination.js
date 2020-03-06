@@ -1,64 +1,141 @@
 import React, { Component, Fragment } from "react";
 
+const defaultProps = {
+  initialPage: 1,
+  pageSize: 10
+};
+class Pagination extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pager: {}
+    };
+  }
 
-export class Pagination extends Component {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            
-        }
+  componentWillMount() {
+    // set page if items array isn't empty
+    if (this.props.total) {
+      this.setPage(this.props.initialPage);
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // reset page if items array has changed
+    if (this.props.total !== prevProps.total) {
+      this.setPage(this.props.initialPage);
+    }
+  }
+
   onPaginate(number) {
-    console.log('number ne: ', number);
-    
+    console.log("number ne: ", number);
     this.props.paginate(number);
   }
 
-
-  renderPagination = () => {
+  setPage(page) {
+    console.log("page: ", page);
+    // var { items, pageSize } = this.props;
     const { currentPage, total, postPerPage } = this.props;
 
-    if(total <= 10) { 
-        return null;
+    let pager = this.state.pager;
+
+    if (page < 1 || page > pager.totalPages) {
+      return;
     }
 
-    // const range = [];
-    // for (let i = 0; i < Math.ceil(total / postPerPage); ++i) {
-    //   range.push(i);
-    // }
-    // console.log('rang ne: ', range);
-    
+    // get new pager object for specified page
+    pager = this.getPager(total, currentPage, postPerPage);
+    console.log("pager ne ", pager);
 
-    const pageNumber = [];
-    if (total !== null) {
-      for (let i = 1; i <= Math.ceil(total / postPerPage); i++) {
-        pageNumber.push(i);
+    // update state
+    this.setState({ pager: pager });
+    // this.onPaginate(page);
+  }
+
+  getPager(total, currentPage, postPerPage) {
+    currentPage = currentPage || 1;
+    postPerPage = postPerPage || 10;
+
+    const totalPages = Math.ceil(total / postPerPage);
+
+    let startPage, endPage;
+    if (totalPages <= 10) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
       }
     }
 
-    
+    const startIndex = (currentPage - 1) * postPerPage;
+    const endIndex = Math.min(startIndex + postPerPage - 1, total - 1);
+
+    const pages = [...Array(endPage + 1 - startPage).keys()].map(
+      i => startPage + i
+    );
+
+    return {
+      total: total,
+      currentPage: currentPage,
+      postPerPage: postPerPage,
+      totalPages: totalPages,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: startIndex,
+      endIndex: endIndex,
+      pages: pages
+    };
+  }
+
+  renderPagination = () => {
+    const { currentPage, total, postPerPage } = this.props;
+    const pager = this.state.pager;
+    console.log("pager ", pager);
+
+    if (!pager.pages || pager.pages.length <= 1) {
+      return null;
+    }
     return (
       <Fragment>
-        <span className="sr-pagination--btn sr-pagination--previous" href="/#">
+        <span
+          className={`sr-pagination--btn sr-pagination--previous ${
+            pager.currentPage === 1 ? "disabled" : ""
+          }`}
+          onClick={() => this.setPage(pager.currentPage - 1)}
+          href="/#"
+        >
           Trước
         </span>
         <div className="sr-pagination__items d-flex align-items-center">
-          {pageNumber &&
-            pageNumber.slice(0,6).map(number => {
-              return (
-                <span
-                  key={number}
-                  className={`sr-pagination--item ${currentPage === number &&
-                    "is-actived"}`}
-                  onClick={() => this.onPaginate(number)}
-                >
-                  {number}
-                </span>
-              );
-            })}
+          {pager && pager.pages.map((page, index) => {
+            console.log(page);
+            return (
+              <span
+                key={index}
+                className={`sr-pagination--item ${
+                  this.props.currentPage === page ? "is-actived" : ""
+                }`}
+                onClick={() => this.onPaginate(page)}
+              >
+                {page}
+              </span>
+            );
+          })}
         </div>
-        <span className="sr-pagination--btn sr-pagination--next" href="/#">
+        <span
+          className={`sr-pagination--btn sr-pagination--next ${
+            pager.currentPage === pager.totalPages ? "disabled" : ""
+          }`}
+          onClick={() => this.setPage(pager.currentPage + 1)}
+          href="/#"
+        >
           Tiếp
         </span>
       </Fragment>

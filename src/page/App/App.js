@@ -28,13 +28,13 @@ export class App extends Component {
   };
 
   keyPressed(event) {
-    if (event.key === "Enter") {
-      console.log(alert("ok"));
-      //   console.log("state ne: ", this.state.keyword);
-    }
+    // if (event.key === "Enter") {
+    //   this.getPostByKeyWord();
+  
+    // }
   }
 
-  getPostByKeyWord = () => {
+  getPostByKeyWord = (event) => {
     this.props.onSearchPostByKeyWord(this.state.keyword);
   };
 
@@ -50,7 +50,10 @@ export class App extends Component {
                     className="row-item-suggestion-popup d-flex"
                     key={post.rel_id}
                   >
-                    {post.title}
+                    <img src="../../assets/img/SVG/search.svg"/>
+                    <div className="ml-2">
+                      {post.title}
+                    </div>
                   </li>
                 </Link>
               );
@@ -61,7 +64,7 @@ export class App extends Component {
   };
 
   render() {
-	//   const postSuggestion = this.props.listSuggestion.postReducer;
+    //   const postSuggestion = this.props.listSuggestion.postReducer;
     return (
       <div className="section-homepage">
         <div className="container-fluid homepage__container">
@@ -324,13 +327,14 @@ export class App extends Component {
                       >
                         <input
                           className="form-control"
-                          id="autoComplete"
+                          // id="autoComplete"
                           type="text"
                           name="keyword"
                           placeholder="Search ..."
                           tabindex="1"
                           onChange={this.onChange}
                           onKeyPress={this.keyPressed}
+                          autocomplete="off"
                         />
                         {this.renderSearchSuggestion()}
                       </div>
@@ -401,7 +405,6 @@ export class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("state: ", state);
   return {
     listSuggestion: state.postReducer.searchSuggestion
   };

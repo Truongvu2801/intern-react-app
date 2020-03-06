@@ -23,7 +23,7 @@ class ListItems extends Component {
     this.getTotalPost();
   }
 
-  getPostByKeyword = (pageNumber) => {
+  getPostByKeyword = (pageNumber = 1) => { // check day ne 
     const paramUrl = this.props.match.params.keyword;
     this.props.onSearchPostByKeyWord(paramUrl, pageNumber);
     this.setState({
@@ -31,35 +31,33 @@ class ListItems extends Component {
     });
   };
 
-  getTotalPost(){
+  getTotalPost() {
     const paramUrl = this.props.match.params.keyword;
     this.props.onCountTotalPosts(paramUrl);
-  };
+  }
 
   static getDerivedStateFromProps(props, state) {
-	  console.log('props ne', props);
-	  
     if (state.totalPost !== props.getNumberPost) {
       return {
-		totalPost: props.getNumberPost,
+        totalPost: props.getNumberPost
       };
-	}
-	return null
+    }
+    return null;
   }
 
-  paginate (pageNumber) {
-	this.setState({
-		currentPage: pageNumber
-	}, () => this.getPostByKeyword(this.state.currentPage))
+  paginate(pageNumber) {
+    if (pageNumber) {
+      this.setState(
+        {
+          currentPage: pageNumber
+        },
+        () => this.getPostByKeyword(this.state.currentPage)
+      );
+    }
   }
-//   abc = (value) => {
-// 	  this.setState({
-// 		listPosts: value,
-// 	  })
-//   }
+
   render() {
-    // console.log("aaaaa", this.state.currentPage);
-	// {this.props.listPosts && abc(this.props.listPosts)}
+    console.log("currentPage: ", this.state.currentPage);
     return (
       <section className="section__result-pages">
         <div className="container-fluid result-pages__container">
@@ -219,7 +217,11 @@ class ListItems extends Component {
               <div className="result-pages__search-result">
                 <div className="rp-search-result__header">
                   <div className="text-result">
-                    Khoảng <strong>1.782</strong> kết quả
+                    Khoảng{" "}
+                    <strong>
+                      {this.state.totalPost && this.state.totalPost}
+                    </strong>{" "}
+                    kết quả
                   </div>
                   <div className="search-result__header-map">
                     <div className="header-map__container">
@@ -244,21 +246,22 @@ class ListItems extends Component {
                   </div>
                 </div>
 
-                { this.state.listPosts && this.state.listPosts.map(post => {
-                  return (
-                    <NavLink to={`/posts/detail?id=${post.rel_id}&page=${this.state.currentPage}`}>
-                      <Item post={post} />;
-                    </NavLink>
-                  );
-                })}
+                {this.state.listPosts &&
+                  this.state.listPosts.map(post => {
+                    return (
+                      <NavLink to={`/posts?id=${post._id}`}>
+                        <Item post={post} />;
+                      </NavLink>
+                    );
+                  })}
               </div>
             </div>
-            <Pagination 
-				total={this.state.totalPost}
-				postPerPage={this.state.postPerPage}
-				currentPage={this.state.currentPage}
-				paginate ={(pageNumber) => this.paginate(pageNumber)}
-			/>
+            <Pagination
+              total={this.state.totalPost}
+              postPerPage={this.state.postPerPage}
+              currentPage={this.state.currentPage}
+              paginate={pageNumber => this.paginate(pageNumber)}
+            />
           </div>
         </div>
       </section>
@@ -267,7 +270,6 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
-	console.log('state nee ', state);
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost

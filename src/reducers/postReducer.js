@@ -2,15 +2,18 @@ import * as Types from "../constants/ActionTypes";
 var initialState = {
   posts: "",
   totalPost: "",
-  searchSuggestion: ""
+  searchSuggestion: "",
+  post:""
 };
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
-    case Types.FETCH_POST:
-      return { ...state }, action.posts;
+    // case Types.FETCH_POST:
+    //   return { ...state }, action.posts;
     case Types.GET_POST_BY_ID:
-      return { ...state }, action.post;
+      console.log(action.post);
+      
+      return { ...state, post: action.post };
     case Types.SEARCH_POST:
       return { ...state, searchSuggestion: action.posts };
     case Types.SEARCH_POST_BY_KEYWORD:

@@ -15,9 +15,10 @@ const routes = [
         component: ListItems
     },
     {
-        path: '/posts/detail/:id',
+        path: '/posts',
         exact: false,
-        component: ItemDetail
+        component: ItemDetail,
+        // main: (props) => <ItemDetail {...props}/>
     }
 
 ]
