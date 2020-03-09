@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, Redirect, useHistory } from "react-router-dom";
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest
@@ -27,16 +27,14 @@ export class App extends Component {
     );
   };
 
-  keyPressed(event) {
-    // if (event.key === "Enter") {
-    //   this.getPostByKeyWord();
-  
-    // }
+  handleKey(event) {
+    // document.addEventListener("keypress", someOtherFunction);
+    // document.addEventListener({
+    //   switch(keypress){
+      
+    //   }
+    // }, )
   }
-
-  getPostByKeyWord = (event) => {
-    this.props.onSearchPostByKeyWord(this.state.keyword);
-  };
 
   renderSearchSuggestion = () => {
     const listSuggestionPosts = this.props.listSuggestion;
@@ -49,11 +47,10 @@ export class App extends Component {
                   <li
                     className="row-item-suggestion-popup d-flex"
                     key={post.rel_id}
+                    tabIndex="1"
                   >
-                    <img src="../../assets/img/SVG/search.svg"/>
-                    <div className="ml-2">
-                      {post.title}
-                    </div>
+                    <img src="../../assets/img/SVG/search.svg" />
+                    <div className="ml-2">{post.title}</div>
                   </li>
                 </Link>
               );
@@ -328,12 +325,13 @@ export class App extends Component {
                         <input
                           className="form-control"
                           // id="autoComplete"
+                          id="scriptBox"
                           type="text"
                           name="keyword"
                           placeholder="Search ..."
                           tabindex="1"
                           onChange={this.onChange}
-                          onKeyPress={this.keyPressed}
+                          onKeyPress={this.handleKey}
                           autocomplete="off"
                         />
                         {this.renderSearchSuggestion()}

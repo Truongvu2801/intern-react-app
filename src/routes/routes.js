@@ -13,9 +13,10 @@ const routes = [
         path: '/posts/:keyword',
         exact: false,
         component: ListItems
+        // main: (props) => <ListItems {...props}/>
     },
     {
-        path: '/posts',
+        path: '/post',
         exact: false,
         component: ItemDetail,
         // main: (props) => <ItemDetail {...props}/>

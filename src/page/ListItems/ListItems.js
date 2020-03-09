@@ -7,6 +7,7 @@ import {
   actCountAllPostsRequest
 } from "../../actions/index";
 import Pagination from "../Pagination/Pagination";
+import callApi from "../../utils/apiHelper";
 class ListItems extends Component {
   constructor(props) {
     super(props);
@@ -18,14 +19,24 @@ class ListItems extends Component {
     };
   }
 
+  // UNSAFE_componentWillMount(){
+  //   console.log('CC');
+
+  //   this.getPostByKeyword(this.state.currentPage);
+  // }
+
   componentDidMount() {
-    this.getPostByKeyword();
+    // const x = callApi
+    // if (data) {}
+    this.getPostByKeyword(this.state.currentPage);
     this.getTotalPost();
   }
 
-  getPostByKeyword = (pageNumber = 1) => { // check day ne 
+  getPostByKeyword = pageNumber => {
     const paramUrl = this.props.match.params.keyword;
-    this.props.onSearchPostByKeyWord(paramUrl, pageNumber);
+    if (paramUrl) {
+      this.props.onSearchPostByKeyWord(paramUrl, pageNumber);
+    }
     this.setState({
       listPosts: this.props.listPosts
     });
@@ -245,13 +256,16 @@ class ListItems extends Component {
                   </div>
                 </div>
 
-                {this.state.listPosts &&
-                  this.state.listPosts.map(post => {
-                    return (
-                      <NavLink to={`/posts?id=${post._id}`}>
+                {this.props.valueProps &&
+                  this.props.valueProps.map(post => {
+                    return <Item post={post} />;
+                    {
+                      /* return (
+                      <NavLink to={`/post?id=${post._id}`}>
                         <Item post={post} />;
                       </NavLink>
-                    );
+                    ); */
+                    }
                   })}
               </div>
             </div>
@@ -269,9 +283,11 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state.postReducer.posts);
   return {
     listPosts: state.postReducer.posts,
-    getNumberPost: state.postReducer.totalPost
+    getNumberPost: state.postReducer.totalPost,
+    valueProps: state.postReducer.posts
   };
 };
 
