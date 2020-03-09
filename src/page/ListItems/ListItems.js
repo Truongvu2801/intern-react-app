@@ -57,7 +57,6 @@ class ListItems extends Component {
   }
 
   render() {
-    console.log("currentPage: ", this.state.currentPage);
     return (
       <section className="section__result-pages">
         <div className="container-fluid result-pages__container">

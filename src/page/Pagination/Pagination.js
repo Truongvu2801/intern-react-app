@@ -26,14 +26,11 @@ class Pagination extends Component {
     }
   }
 
-  onPaginate(number) {
-    console.log("number ne: ", number);
-    this.props.paginate(number);
-  }
+  // onPaginate(number) {
+  //   this.props.paginate(number);
+  // }
 
-  setPage(page) {
-    console.log("page: ", page);
-    // var { items, pageSize } = this.props;
+  setPage = async (page) => {
     const { currentPage, total, postPerPage } = this.props;
 
     let pager = this.state.pager;
@@ -43,12 +40,10 @@ class Pagination extends Component {
     }
 
     // get new pager object for specified page
-    pager = this.getPager(total, currentPage, postPerPage);
-    console.log("pager ne ", pager);
-
+    pager = await this.getPager(total, currentPage, postPerPage);
+    
     // update state
-    this.setState({ pager: pager });
-    // this.onPaginate(page);
+    this.setState({ pager: pager }, () => this.props.paginate(page))
   }
 
   getPager(total, currentPage, postPerPage) {
@@ -77,7 +72,7 @@ class Pagination extends Component {
     const startIndex = (currentPage - 1) * postPerPage;
     const endIndex = Math.min(startIndex + postPerPage - 1, total - 1);
 
-    const pages = [...Array(endPage + 1 - startPage).keys()].map(
+    const pages = [...Array(endPage - startPage).keys()].map(
       i => startPage + i
     );
 
@@ -95,9 +90,7 @@ class Pagination extends Component {
   }
 
   renderPagination = () => {
-    const { currentPage, total, postPerPage } = this.props;
     const pager = this.state.pager;
-    console.log("pager ", pager);
 
     if (!pager.pages || pager.pages.length <= 1) {
       return null;
@@ -106,23 +99,22 @@ class Pagination extends Component {
       <Fragment>
         <span
           className={`sr-pagination--btn sr-pagination--previous ${
-            pager.currentPage === 1 ? "disabled" : ""
+            this.props.currentPage === 1 ? "disabled" : ""
           }`}
-          onClick={() => this.setPage(pager.currentPage - 1)}
+          onClick={() => this.setPage(this.props.currentPage - 1)}
           href="/#"
         >
           Trước
         </span>
         <div className="sr-pagination__items d-flex align-items-center">
           {pager && pager.pages.map((page, index) => {
-            console.log(page);
             return (
               <span
                 key={index}
                 className={`sr-pagination--item ${
                   this.props.currentPage === page ? "is-actived" : ""
                 }`}
-                onClick={() => this.onPaginate(page)}
+                onClick={() => this.setPage(page)}
               >
                 {page}
               </span>
@@ -131,9 +123,9 @@ class Pagination extends Component {
         </div>
         <span
           className={`sr-pagination--btn sr-pagination--next ${
-            pager.currentPage === pager.totalPages ? "disabled" : ""
+            this.props.currentPage === pager.totalPages ? "disabled" : ""
           }`}
-          onClick={() => this.setPage(pager.currentPage + 1)}
+          onClick={() => this.setPage(this.props.currentPage + 1)}
           href="/#"
         >
           Tiếp
