@@ -1,15 +1,45 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavLink, Link, Redirect, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest
 } from "../../actions/index";
+
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      keyword: ""
+      keyword: "",
+      data: [
+        {
+          name: "company",
+          status: true,
+          rel_id: "5db814ca5d0a533960ad5c6c",
+          weight: 0.1,
+          refPath: "res_company",
+          ward_id: "5dc237ded508de3c4c58cd28",
+          title: "SSG"
+        },
+        {
+          name: "company",
+          status: true,
+          rel_id: "5db814ca5d0a533960ad5c6c",
+          weight: 0.1,
+          refPath: "res_company",
+          ward_id: "5dc237ded508de3c4c58cd28",
+          title: "SSG1"
+        },
+        {
+          name: "company",
+          status: true,
+          rel_id: "5db814ca5d0a533960ad5c6c",
+          weight: 0.1,
+          refPath: "res_company",
+          ward_id: "5dc237ded508de3c4c58cd28",
+          title: "SSG2"
+        }
+      ]
     };
   }
 
@@ -23,34 +53,54 @@ export class App extends Component {
       },
       () => {
         this.props.onSearchPost(this.state.keyword);
+        if (e.key === "Enter") {
+          this.props.onSearchPostByKeyWord(e.target.value);
+        }
       }
     );
   };
 
-  handleKey(event) {
+  handleEnter = (event, index) => {
     // document.addEventListener(event.key === 'Enter', alert('huhuhh'))
-    // keyword = this.state.keyword;
-    console.log(event.target.value);
-    
-    if (event.key === "Enter") {
-      this.props.onSearchPostByKeyWord(event.target.value);
-      
+    const key = event.keyCode || event.which;
+    if (key === 13) {
+      document.location.href = `/posts/${this.state.keyword}`;
+    } else if (key === 40) {
+      console.log("40");
+    } else if (key === 38) {
+      return (index -= 1);
     }
-  }
+    return;
+    // this.props.onSearchPostByKeyWord(this.state.value);
+  };
+
+  // handleKey = (event, index) => {
+  //   const key = event.keyCode || event.which;
+  //   if(key === 40){
+  //     return index += 1
+  //   } else if(key === 38){
+  //     return index -= 1
+  //   }
+  //   return;
+  // }
 
   renderSearchSuggestion = () => {
     const listSuggestionPosts = this.props.listSuggestion;
+    // const listSuggestionPosts = this.state.data;
     return (
       <ul id="autoComplete_results_list">
         {listSuggestionPosts.length > 0
-          ? listSuggestionPosts.map(post => {
-            console.log(post)
+          ? listSuggestionPosts.map((post, index) => {
+              {
+                /* this.handleEnter(index); */
+              }
+              console.log(listSuggestionPosts);
               return (
                 <Link to={`/posts/${this.state.keyword}`}>
                   <li
                     className="row-item-suggestion-popup d-flex"
+                    style={{ cursor: "pointer" }}
                     key={post.rel_id}
-                    tabIndex="1"
                   >
                     <img src="../../assets/img/SVG/search.svg" />
                     <div className="ml-2">{post.title}</div>
@@ -61,6 +111,13 @@ export class App extends Component {
           : ""}
       </ul>
     );
+    // return (
+    //   <ul id="autoComplete_results_list">
+    //     {
+    //       listSuggestionPosts
+    //     }
+    //   </ul>
+    // );
   };
 
   render() {
@@ -332,7 +389,7 @@ export class App extends Component {
                           placeholder="Search ..."
                           tabindex="1"
                           onChange={this.onChange}
-                          onKeyPress={this.handleKey}
+                          onKeyDown={this.handleEnter}
                           autocomplete="off"
                         />
                         {this.renderSearchSuggestion()}
