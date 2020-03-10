@@ -19,15 +19,7 @@ class ListItems extends Component {
     };
   }
 
-  // UNSAFE_componentWillMount(){
-  //   console.log('CC');
-
-  //   this.getPostByKeyword(this.state.currentPage);
-  // }
-
   componentDidMount() {
-    // const x = callApi
-    // if (data) {}
     this.getPostByKeyword(this.state.currentPage);
     this.getTotalPost();
   }
@@ -258,14 +250,11 @@ class ListItems extends Component {
 
                 {this.props.valueProps &&
                   this.props.valueProps.map(post => {
-                    return <Item post={post} />;
-                    {
-                      /* return (
+                    return (
                       <NavLink to={`/post?id=${post._id}`}>
-                        <Item post={post} />;
+                        <Item post={post} />
                       </NavLink>
-                    ); */
-                    }
+                    );
                   })}
               </div>
             </div>

@@ -28,12 +28,14 @@ export class App extends Component {
   };
 
   handleKey(event) {
-    // document.addEventListener("keypress", someOtherFunction);
-    // document.addEventListener({
-    //   switch(keypress){
+    // document.addEventListener(event.key === 'Enter', alert('huhuhh'))
+    // keyword = this.state.keyword;
+    console.log(event.target.value);
+    
+    if (event.key === "Enter") {
+      this.props.onSearchPostByKeyWord(event.target.value);
       
-    //   }
-    // }, )
+    }
   }
 
   renderSearchSuggestion = () => {
@@ -42,6 +44,7 @@ export class App extends Component {
       <ul id="autoComplete_results_list">
         {listSuggestionPosts.length > 0
           ? listSuggestionPosts.map(post => {
+            console.log(post)
               return (
                 <Link to={`/posts/${this.state.keyword}`}>
                   <li
@@ -61,7 +64,6 @@ export class App extends Component {
   };
 
   render() {
-    //   const postSuggestion = this.props.listSuggestion.postReducer;
     return (
       <div className="section-homepage">
         <div className="container-fluid homepage__container">
@@ -324,7 +326,6 @@ export class App extends Component {
                       >
                         <input
                           className="form-control"
-                          // id="autoComplete"
                           id="scriptBox"
                           type="text"
                           name="keyword"

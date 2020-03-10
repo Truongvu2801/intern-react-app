@@ -39,7 +39,6 @@ export const actSearchPost = posts => {
 };
 
 export const actSearchPostByKeyWordRequest = (keyword, pageNumber) => {
-  console.log(keyword);
   return dispatch => {
     return callApi(
       `search/get_post_by_keyword?keyword=${keyword}&page=${pageNumber}`,
