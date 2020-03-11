@@ -9,22 +9,16 @@ class Pagination extends Component {
   }
 
   componentWillMount() {
-    // set page if items array isn't empty
     if (this.props.total) {
       this.setPage(this.props.initialPage);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // reset page if items array has changed
     if (this.props.total !== prevProps.total) {
       this.setPage(this.props.initialPage);
     }
   }
-
-  // onPaginate(number) {
-  //   this.props.paginate(number);
-  // }
 
   setPage = async (page) => {
     const { currentPage, total, postPerPage } = this.props;
@@ -38,7 +32,6 @@ class Pagination extends Component {
     // get new pager object for specified page
     pager = await this.getPager(total, currentPage, postPerPage);
     
-    // update state
     this.setState({ pager: pager }, () => this.props.paginate(page))
   }
 

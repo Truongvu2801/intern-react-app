@@ -47,7 +47,6 @@ export const actSearchPostByKeyWordRequest = (keyword, pageNumber) => {
       null
     ).then(res => {
       const values = queryString.parse(res.config.url);
-      console.log(values.page);
       if (res) {
         dispatch(actSearchPostByKeyWord(res.data, values.page));
       }
