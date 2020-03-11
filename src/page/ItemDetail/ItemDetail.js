@@ -20,9 +20,6 @@ class ItemDetail extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    console.log("props ne", props);
-    console.log("state: ", state);
-
     if (state.post !== props.post) {
       return {
         post: props.post
@@ -33,8 +30,6 @@ class ItemDetail extends Component {
 
   render() {
 	const post = this.state.post;
-	console.log(post);
-	
     return (
       <section className="News-Detail-Page">
         {/* <!-- Button to Open the Modal --> */}
@@ -71,6 +66,7 @@ class ItemDetail extends Component {
                               <img
                                 className="nd-header--logo"
                                 src="../../assets/img/avatar-user.png"
+                                alt="/#"
                               />
                             </div>
                             <div className="nd-header__title">
@@ -86,6 +82,7 @@ class ItemDetail extends Component {
                                     <img
                                       className="edit-star"
                                       src="../../assets/img/SVG/star.svg"
+                                      alt="/#"
                                     />
                                   </span>
                                   ]
@@ -102,6 +99,7 @@ class ItemDetail extends Component {
                           <img
                             className="edit-picture"
                             src="../../assets/img/phong_detail.png"
+                            alt="/#"
                           />
                           <div className="nd-content__texts">
                             <p className="text-1">
@@ -123,10 +121,10 @@ class ItemDetail extends Component {
                               <div className="swiper-container">
                                 <div className="swiper-wrapper swiper-content">
                                   <div className="swiper-slide">
-                                    <img src="../../assets/img/toa_nha_2.png" />
+                                    <img src="../../assets/img/toa_nha_2.png" alt="/#"/>
                                   </div>
                                   <div className="swiper-slide">
-                                    <img src="../../assets/img/phong_detail.png" />
+                                    <img src="../../assets/img/phong_detail.png" alt="/#"/>
                                   </div>
                                 </div>
                                 {/* <!-- Add Arrows --> */}
@@ -184,21 +182,21 @@ class ItemDetail extends Component {
                                   Tags:
                                 </span>
                                 <div className="nav-item edit-tags">
-                                  <a className="tag-item  text-2">BatDongSan</a>
+                                  <a className="tag-item  text-2" href="/#">BatDongSan</a>
                                 </div>
                                 <div className="nav-item edit-tags">
-                                  <a className="tag-item text-2 tag-item-3">
+                                  <a className="tag-item text-2 tag-item-3" href="/#">
                                     Laisuatnganhang
                                   </a>
                                 </div>
                                 <div className="nav-item edit-tags">
-                                  <a className="tag-item  text-2">BatDongSan</a>
+                                  <a className="tag-item  text-2" href="/#">BatDongSan</a>
                                 </div>
                                 <div className="nav-item edit-tags">
-                                  <a className="tag-item  text-2">BatDongSan</a>
+                                  <a className="tag-item  text-2" href="/#">BatDongSan</a>
                                 </div>
                                 <div className="nav-item edit-tags">
-                                  <a className="tag-item  text-2">BatDongSan</a>
+                                  <a className="tag-item  text-2" href="/#">BatDongSan</a>
                                 </div>
                               </div>
                             </div>

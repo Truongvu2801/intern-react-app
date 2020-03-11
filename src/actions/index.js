@@ -1,5 +1,6 @@
 import * as Types from "../constants/ActionTypes";
 import callApi from "../utils/apiHelper";
+import queryString from "query-string";
 
 export const actGetPostByIdRequest = id => {
   return dispatch => {
@@ -45,17 +46,22 @@ export const actSearchPostByKeyWordRequest = (keyword, pageNumber) => {
       "GET",
       null
     ).then(res => {
+      const values = queryString.parse(res.config.url);
+      console.log(values.page);
       if (res) {
-        dispatch(actSearchPostByKeyWord(res.data));
+        dispatch(actSearchPostByKeyWord(res.data, values.page));
       }
     });
   };
 };
 
-export const actSearchPostByKeyWord = data => {
+export const actSearchPostByKeyWord = (data, page) => {
+  console.log(page);
+  console.log(data);
   return {
     type: Types.SEARCH_POST_BY_KEYWORD,
-    data
+    data,
+    page
   };
 };
 

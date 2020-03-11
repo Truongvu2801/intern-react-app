@@ -5,41 +5,45 @@ import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest
 } from "../../actions/index";
+import store from "../../index";
 
 export class App extends Component {
   constructor(props) {
     super(props);
+    console.log(store);
+
     this.state = {
       keyword: "",
-      data: [
-        {
-          name: "company",
-          status: true,
-          rel_id: "5db814ca5d0a533960ad5c6c",
-          weight: 0.1,
-          refPath: "res_company",
-          ward_id: "5dc237ded508de3c4c58cd28",
-          title: "SSG"
-        },
-        {
-          name: "company",
-          status: true,
-          rel_id: "5db814ca5d0a533960ad5c6c",
-          weight: 0.1,
-          refPath: "res_company",
-          ward_id: "5dc237ded508de3c4c58cd28",
-          title: "SSG1"
-        },
-        {
-          name: "company",
-          status: true,
-          rel_id: "5db814ca5d0a533960ad5c6c",
-          weight: 0.1,
-          refPath: "res_company",
-          ward_id: "5dc237ded508de3c4c58cd28",
-          title: "SSG2"
-        }
-      ]
+      currentPage: 1
+      // data: [
+      //   {
+      //     name: "company",
+      //     status: true,
+      //     rel_id: "5db814ca5d0a533960ad5c6c",
+      //     weight: 0.1,
+      //     refPath: "res_company",
+      //     ward_id: "5dc237ded508de3c4c58cd28",
+      //     title: "SSG"
+      //   },
+      //   {
+      //     name: "company",
+      //     status: true,
+      //     rel_id: "5db814ca5d0a533960ad5c6c",
+      //     weight: 0.1,
+      //     refPath: "res_company",
+      //     ward_id: "5dc237ded508de3c4c58cd28",
+      //     title: "SSG1"
+      //   },
+      //   {
+      //     name: "company",
+      //     status: true,
+      //     rel_id: "5db814ca5d0a533960ad5c6c",
+      //     weight: 0.1,
+      //     refPath: "res_company",
+      //     ward_id: "5dc237ded508de3c4c58cd28",
+      //     title: "SSG2"
+      //   }
+      // ]
     };
   }
 
@@ -61,28 +65,16 @@ export class App extends Component {
   };
 
   handleEnter = (event, index) => {
-    // document.addEventListener(event.key === 'Enter', alert('huhuhh'))
     const key = event.keyCode || event.which;
     if (key === 13) {
-      document.location.href = `/posts/${this.state.keyword}`;
+      document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
     } else if (key === 40) {
       console.log("40");
     } else if (key === 38) {
-      return (index -= 1);
+      console.log("38");
     }
     return;
-    // this.props.onSearchPostByKeyWord(this.state.value);
   };
-
-  // handleKey = (event, index) => {
-  //   const key = event.keyCode || event.which;
-  //   if(key === 40){
-  //     return index += 1
-  //   } else if(key === 38){
-  //     return index -= 1
-  //   }
-  //   return;
-  // }
 
   renderSearchSuggestion = () => {
     const listSuggestionPosts = this.props.listSuggestion;
@@ -91,18 +83,17 @@ export class App extends Component {
       <ul id="autoComplete_results_list">
         {listSuggestionPosts.length > 0
           ? listSuggestionPosts.map((post, index) => {
-              {
-                /* this.handleEnter(index); */
-              }
               console.log(listSuggestionPosts);
               return (
-                <Link to={`/posts/${this.state.keyword}`}>
+                <Link
+                  to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
+                >
                   <li
                     className="row-item-suggestion-popup d-flex"
                     style={{ cursor: "pointer" }}
                     key={post.rel_id}
                   >
-                    <img src="../../assets/img/SVG/search.svg" />
+                    <img src="../../assets/img/SVG/search.svg" alt="/#"/>
                     <div className="ml-2">{post.title}</div>
                   </li>
                 </Link>
@@ -111,13 +102,6 @@ export class App extends Component {
           : ""}
       </ul>
     );
-    // return (
-    //   <ul id="autoComplete_results_list">
-    //     {
-    //       listSuggestionPosts
-    //     }
-    //   </ul>
-    // );
   };
 
   render() {
@@ -461,8 +445,11 @@ export class App extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state);
+
   return {
-    listSuggestion: state.postReducer.searchSuggestion
+    listSuggestion: state.postReducer.searchSuggestion,
+    page: state.postReducer.pageNumber
   };
 };
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import App  from "../page/App/App";
 import ListItems from '../page/ListItems/ListItems';
 import ItemDetail from '../page/ItemDetail/ItemDetail';
@@ -10,7 +9,7 @@ const routes = [
         component: App
     },
     {
-        path: '/posts/:keyword',
+        path: '/posts',
         exact: false,
         component: ListItems
         // main: (props) => <ListItems {...props}/>

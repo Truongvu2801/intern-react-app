@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
+import queryString from "query-string";
 import Item from "../Item/Item";
 import {
   actSearchPostByKeyWordRequest,
   actCountAllPostsRequest
 } from "../../actions/index";
 import Pagination from "../Pagination/Pagination";
-import callApi from "../../utils/apiHelper";
 class ListItems extends Component {
   constructor(props) {
     super(props);
@@ -25,9 +25,9 @@ class ListItems extends Component {
   }
 
   getPostByKeyword = pageNumber => {
-    const paramUrl = this.props.match.params.keyword;
-    if (paramUrl) {
-      this.props.onSearchPostByKeyWord(paramUrl, pageNumber);
+    const values = queryString.parse(this.props.location.search);
+    if (values) {
+      this.props.onSearchPostByKeyWord(values.key, this.state.currentPage);
     }
     this.setState({
       listPosts: this.props.listPosts
@@ -35,8 +35,8 @@ class ListItems extends Component {
   };
 
   getTotalPost() {
-    const paramUrl = this.props.match.params.keyword;
-    this.props.onCountTotalPosts(paramUrl);
+    const values = queryString.parse(this.props.location.search);
+    this.props.onCountTotalPosts(values.key);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -70,7 +70,7 @@ class ListItems extends Component {
                   <div className="rp-header-top__logo lh-top__logo">
                     <div className="header-top--logo lh-top--logo">
                       <a href="/">
-                        <img src="../../../assets/img/icon-asset.png" alt="" />
+                        <img src="../../../assets/img/icon-asset.png" alt="/#" />
                       </a>
                     </div>
                   </div>
@@ -100,15 +100,15 @@ class ListItems extends Component {
                           <img
                             className="ht-menu--icon"
                             src="../../../assets/img/Group 1.png"
-                            alt=""
+                            alt="/#"
                           />
                         </div>
                         <div className="menu-tools__dropdown-menu dropdown-menu">
                           <div className="mt--dropdown-item dropdown-item">
-                            <a href="#">
+                            <a href="/#">
                               <img
                                 src="../../../assets/img/Group 1569.png"
-                                alt=""
+                                alt="/#"
                               />
                               <span className="ht-menu--text">
                                 T&iacute;nh to&aacute;n kho&#x1EA3;n vay
@@ -116,10 +116,10 @@ class ListItems extends Component {
                             </a>
                           </div>
                           <div className="mt--dropdown-item dropdown-item">
-                            <a href="#">
+                            <a href="/#">
                               <img
                                 src="../../../assets/img/baseline-insert_chart-24px.png"
-                                alt=""
+                                alt="/#"
                               />
                               <span className="ht-menu--text">
                                 T&iacute;nh to&aacute;n hi&#x1EC7;u qu&#x1EA3;
@@ -128,10 +128,10 @@ class ListItems extends Component {
                             </a>
                           </div>
                           <div className="mt--dropdown-item dropdown-item">
-                            <a href="#">
+                            <a href="/#">
                               <img
                                 src="../../../assets/img/baseline-monetization_on-24px.png"
-                                alt=""
+                                alt="/#"
                               />
                               <span className="ht-menu--text">
                                 T&agrave;i ch&iacute;nh c&aacute; nh&acirc;n
@@ -142,11 +142,11 @@ class ListItems extends Component {
                       </div>
                       <div className="ht-menu--item">
                         <div className="ht-menu__notify">
-                          <a href="#">
+                          <a href="/#">
                             <img
                               className="ht-menu--icon"
                               src="../../assets/img/Group 22.png"
-                              alt=""
+                              alt="/#"
                             />
                           </a>
                         </div>
@@ -159,7 +159,7 @@ class ListItems extends Component {
                           <img
                             className="ht-menu--icon ht-menu--icon-avatar"
                             src="../../assets/img/icon-avatar.png"
-                            alt=""
+                            alt="/#"
                           />
                         </a>
                       </div>
@@ -176,17 +176,17 @@ class ListItems extends Component {
                       </a>
                     </div>
                     <div className="header-navigation--item">
-                      <a className="hn-item--text" href="#">
+                      <a className="hn-item--text" href="/#">
                         Th&ocirc;ng tin
                       </a>
                     </div>
                     <div className="header-navigation--item">
-                      <a className="hn-item--text" href="#">
+                      <a className="hn-item--text" href="/#">
                         B&#x1EA3;n &dstrok;&#x1ED3;
                       </a>
                     </div>
                     <div className="header-navigation--item">
-                      <a className="hn-item--text" href="#">
+                      <a className="hn-item--text" href="/#">
                         B&#x1EA3;ng gi&aacute;
                       </a>
                     </div>
@@ -199,13 +199,13 @@ class ListItems extends Component {
                       </div>
                       <div className="dropdown-menu hn-menu__add">
                         <div className="dropdown-item">
-                          <a href="#">Danh b&#x1EA1;</a>
+                          <a href="/#">Danh b&#x1EA1;</a>
                         </div>
                         <div className="dropdown-item">
-                          <a href="#">T&agrave;i nguy&ecirc;n</a>
+                          <a href="/#">T&agrave;i nguy&ecirc;n</a>
                         </div>
                         <div className="dropdown-item">
-                          <a href="#">H&#x1ECF;i &dstrok;&aacute;p</a>
+                          <a href="/#">H&#x1ECF;i &dstrok;&aacute;p</a>
                         </div>
                       </div>
                     </div>
@@ -248,8 +248,8 @@ class ListItems extends Component {
                   </div>
                 </div>
 
-                {this.props.valueProps &&
-                  this.props.valueProps.map(post => {
+                {this.props.listPosts.length > 0 &&
+                  this.props.listPosts.map(post => {
                     return (
                       <NavLink to={`/post?id=${post._id}`}>
                         <Item post={post} />
@@ -272,11 +272,9 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state.postReducer.posts);
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
-    valueProps: state.postReducer.posts
   };
 };
 

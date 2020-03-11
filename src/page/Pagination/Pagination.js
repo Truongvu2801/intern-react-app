@@ -1,9 +1,5 @@
 import React, { Component, Fragment } from "react";
 
-const defaultProps = {
-  initialPage: 1,
-  pageSize: 10
-};
 class Pagination extends Component {
   constructor(props) {
     super(props);
