@@ -5,16 +5,13 @@ import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest
 } from "../../actions/index";
-import store from "../../index";
 
 export class App extends Component {
   constructor(props) {
     super(props);
-    console.log(store);
-
     this.state = {
-      keyword: "",
-      currentPage: 1
+      keyword: ""
+
       // data: [
       //   {
       //     name: "company",
@@ -64,26 +61,32 @@ export class App extends Component {
     );
   };
 
-  handleEnter = (event, index) => {
+  handleEnter = event => {
     const key = event.keyCode || event.which;
-    if (key === 13) {
+    if (key === 13 && this.state.keyword !== "") {
       document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
-    } else if (key === 40) {
-      console.log("40");
-    } else if (key === 38) {
-      console.log("38");
+    } else if (key) {
+      this.handleKeyPress(key);
     }
-    return;
   };
+
+  handleKeyPress = (key, index) => {
+    if(key === 40){
+      return index++
+    } else if( key === 38) {
+      return index--
+    }
+    return index
+  }
 
   renderSearchSuggestion = () => {
     const listSuggestionPosts = this.props.listSuggestion;
+    console.log(listSuggestionPosts);
     // const listSuggestionPosts = this.state.data;
     return (
       <ul id="autoComplete_results_list">
         {listSuggestionPosts.length > 0
           ? listSuggestionPosts.map((post, index) => {
-              console.log(listSuggestionPosts);
               return (
                 <Link
                   to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
@@ -93,7 +96,7 @@ export class App extends Component {
                     style={{ cursor: "pointer" }}
                     key={post.rel_id}
                   >
-                    <img src="../../assets/img/SVG/search.svg" alt="/#"/>
+                    <img src="../../assets/img/SVG/search.svg" alt="/#" />
                     <div className="ml-2">{post.title}</div>
                   </li>
                 </Link>

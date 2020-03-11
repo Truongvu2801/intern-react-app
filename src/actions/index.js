@@ -56,8 +56,6 @@ export const actSearchPostByKeyWordRequest = (keyword, pageNumber) => {
 };
 
 export const actSearchPostByKeyWord = (data, page) => {
-  console.log(page);
-  console.log(data);
   return {
     type: Types.SEARCH_POST_BY_KEYWORD,
     data,
