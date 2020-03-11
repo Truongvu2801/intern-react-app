@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import _ from 'lodash';
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest
 } from "../../actions/index";
+import "./App.css";
 
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      keyword: ""
-
+      keyword: "",
+      activeSuggestion: 0
       // data: [
       //   {
       //     name: "company",
@@ -54,60 +56,111 @@ export class App extends Component {
       },
       () => {
         this.props.onSearchPost(this.state.keyword);
-        if (e.key === "Enter") {
-          this.props.onSearchPostByKeyWord(e.target.value);
-        }
       }
     );
   };
 
-  handleEnter = event => {
-    const key = event.keyCode || event.which;
-    if (key === 13 && this.state.keyword !== "") {
+  onKeyDown = e => {
+    const { activeSuggestion } = this.state;
+    console.log(this.props.listSuggestion.length);
+
+    if (e.keyCode === 13) {
       document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
-    } else if (key) {
-      this.handleKeyPress(key);
+    }
+    else if (e.keyCode === 38) {
+      if (activeSuggestion === 0) {
+        return;
+      }
+      this.setState({ activeSuggestion: activeSuggestion - 1 });
+    }
+    else if (e.keyCode === 40) {
+      if (activeSuggestion - 1 === this.props.listSuggestion.length) {
+        return;
+      } else if (this.state.keyword !== "") {
+        this.setState({ activeSuggestion: activeSuggestion + 1 });
+      }
     }
   };
+  // handleEnter = event => {
+  //   const key = event.keyCode || event.which;
+  //   if (key === 13 && this.state.keyword !== "") {
+  //     document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
+  //   } else if (key) {
+  //     this.handleKeyPress(key);
+  //   }
+  // };
 
-  handleKeyPress = (key, index) => {
-    if(key === 40){
-      return index++
-    } else if( key === 38) {
-      return index--
-    }
-    return index
-  }
+  // handleKeyPress = (key, index) => {
+  //   if(key === 40){
+  //     return index++
+  //   } else if( key === 38) {
+  //     return index--
+  //   }
+  //   return index
+  // }
 
-  renderSearchSuggestion = () => {
-    const listSuggestionPosts = this.props.listSuggestion;
-    console.log(listSuggestionPosts);
-    // const listSuggestionPosts = this.state.data;
-    return (
-      <ul id="autoComplete_results_list">
-        {listSuggestionPosts.length > 0
-          ? listSuggestionPosts.map((post, index) => {
+  // renderSearchSuggestion = () => {
+  //   const listSuggestionPosts = this.props.listSuggestion;
+  //   console.log(listSuggestionPosts);
+  //   // const listSuggestionPosts = this.state.data;
+  //   return (
+  //     <ul id="autoComplete_results_list">
+  //       {listSuggestionPosts.length > 0
+  //         ? listSuggestionPosts.map((post, index) => {
+  //             return (
+  //               <Link
+  //                 to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
+  //               >
+  //                 <li
+  //                   className="row-item-suggestion-popup d-flex"
+  //                   style={{ cursor: "pointer" }}
+  //                   key={post.rel_id}
+  //                 >
+  //                   <img src="../../assets/img/SVG/search.svg" alt="/#" />
+  //                   <div className="ml-2">{post.title}</div>
+  //                 </li>
+  //               </Link>
+  //             );
+  //           })
+  //         : ""}
+  //     </ul>
+  //   );
+  // };
+
+  render() {
+    const {
+      onKeyDown,
+      state: { activeSuggestion, keyword }
+    } = this;
+    let suggestionsListComponent;
+
+    if (keyword) {
+      if (this.props.listSuggestion.length) {
+        suggestionsListComponent = (
+          <ul id="autoComplete_results_list">
+            {this.props.listSuggestion.map((suggestion, index) => {
+              let className;
+              if (index === activeSuggestion) {
+                className = "active-suggestion";
+              }
               return (
                 <Link
                   to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
                 >
                   <li
-                    className="row-item-suggestion-popup d-flex"
-                    style={{ cursor: "pointer" }}
-                    key={post.rel_id}
+                    className={`row-item-suggestion-popup d-flex ${className}`}
+                    key={suggestion}
                   >
                     <img src="../../assets/img/SVG/search.svg" alt="/#" />
-                    <div className="ml-2">{post.title}</div>
+                    <div className="ml-2">{suggestion.title}</div>
                   </li>
                 </Link>
               );
-            })
-          : ""}
-      </ul>
-    );
-  };
-
-  render() {
+            })}
+          </ul>
+        );
+      }
+    }
     return (
       <div className="section-homepage">
         <div className="container-fluid homepage__container">
@@ -376,10 +429,11 @@ export class App extends Component {
                           placeholder="Search ..."
                           tabindex="1"
                           onChange={this.onChange}
-                          onKeyDown={this.handleEnter}
+                          onKeyDown={onKeyDown}
                           autocomplete="off"
                         />
-                        {this.renderSearchSuggestion()}
+                        {/* {this.renderSearchSuggestion()} */}
+                        {suggestionsListComponent}
                       </div>
                     </div>
                   </div>
@@ -448,8 +502,6 @@ export class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
-
   return {
     listSuggestion: state.postReducer.searchSuggestion,
     page: state.postReducer.pageNumber
