@@ -4,7 +4,7 @@ class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pager: {}
+      pager: {},
     };
   }
 
@@ -20,8 +20,16 @@ class Pagination extends Component {
     }
   }
 
-  setPage = async (page) => {
-    const { currentPage, total, postPerPage } = this.props;
+  setPage = async page => {
+    console.log("page ne: ", page);
+    if (page !== "undefined") {
+      this.setState({
+        currentPage: page
+      });
+    }
+
+    const { total, postPerPage } = this.props;
+    const { currentPage } = this.props;
 
     let pager = this.state.pager;
 
@@ -31,22 +39,21 @@ class Pagination extends Component {
 
     // get new pager object for specified page
     pager = await this.getPager(total, currentPage, postPerPage);
-    
-    this.setState({ pager: pager }, () => this.props.paginate(page))
-  }
+
+    this.setState({ pager: pager }, () => this.props.paginate(page));
+  };
 
   getPager(total, currentPage, postPerPage) {
     currentPage = currentPage || 1;
     postPerPage = postPerPage || 10;
 
     const totalPages = Math.ceil(total / postPerPage);
-
     let startPage, endPage;
     if (totalPages <= 10) {
       startPage = 1;
       endPage = totalPages;
     } else {
-      if (currentPage <= 6) {
+      if (currentPage <= 5) {
         startPage = 1;
         endPage = 10;
       } else if (currentPage + 4 >= totalPages) {
@@ -96,19 +103,20 @@ class Pagination extends Component {
           Trước
         </span>
         <div className="sr-pagination__items d-flex align-items-center">
-          {pager && pager.pages.map((page, index) => {
-            return (
-              <span
-                key={index}
-                className={`sr-pagination--item ${
-                  this.props.currentPage === page ? "is-actived" : ""
-                }`}
-                onClick={() => this.setPage(page)}
-              >
-                {page}
-              </span>
-            );
-          })}
+          {pager &&
+            pager.pages.map((page, index) => {
+              return (
+                <span
+                  key={index}
+                  className={`sr-pagination--item ${
+                    this.props.currentPage === page ? "is-actived" : ""
+                  }`}
+                  onClick={() => this.setPage(page)}
+                >
+                  {page}
+                </span>
+              );
+            })}
         </div>
         <span
           className={`sr-pagination--btn sr-pagination--next ${

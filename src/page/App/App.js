@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-// import _ from 'lodash';
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest,
@@ -27,17 +26,13 @@ export class App extends Component {
     this.setState(
       {
         [name]: value,
-        showSuggestions: true,
+        showSuggestions: true
       },
       () => {
         this.props.onSearchPost(this.state.keyword);
       }
     );
   };
-
-  // onClickItem = () => {
-
-  // }
 
   onKeyDown = e => {
     let { activeSuggestion } = this.state;
@@ -47,12 +42,18 @@ export class App extends Component {
       if (activeSuggestion === 0) {
         return;
       }
-      this.setState({ activeSuggestion: activeSuggestion - 1, keyword: this.props.listSuggestion[activeSuggestion - 1].title});
+      this.setState({
+        activeSuggestion: activeSuggestion - 1,
+        keyword: this.props.listSuggestion[activeSuggestion - 1].title
+      });
     } else if (e.keyCode === 40) {
       if (activeSuggestion + 1 === this.props.listSuggestion.length) {
         return;
       } else if (this.state.keyword !== "") {
-        this.setState({ activeSuggestion: activeSuggestion + 1, keyword: this.props.listSuggestion[activeSuggestion + 1].title});
+        this.setState({
+          activeSuggestion: activeSuggestion + 1,
+          keyword: this.props.listSuggestion[activeSuggestion + 1].title
+        });
       }
     }
   };
@@ -75,7 +76,9 @@ export class App extends Component {
               }
               return (
                 <Link
-                  to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
+                  to={`/posts?key=${this.state.keyword
+                    .split(" ")
+                    .join("+")}&page=${this.props.page}`}
                 >
                   <li
                     className={`row-item-suggestion-popup d-flex ${className}`}
@@ -432,8 +435,6 @@ export class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
-
   return {
     listSuggestion: state.postReducer.searchSuggestion,
     page: state.postReducer.pageNumber,

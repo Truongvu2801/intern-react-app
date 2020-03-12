@@ -62,8 +62,6 @@ class ListItems extends Component {
   }
 
   render() {
-    console.log(this.state.queryString);
-    
     return (
       <section className="section__result-pages">
         <div className="container-fluid result-pages__container">
@@ -277,8 +275,6 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
-  
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
