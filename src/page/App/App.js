@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import _ from 'lodash';
+// import _ from 'lodash';
 import {
   actSearchPostRequest,
-  actSearchPostByKeyWordRequest
+  actSearchPostByKeyWordRequest,
+  actStoreValueSearch
 } from "../../actions/index";
 import "./App.css";
 
@@ -13,36 +14,9 @@ export class App extends Component {
     super(props);
     this.state = {
       keyword: "",
-      activeSuggestion: 0
-      // data: [
-      //   {
-      //     name: "company",
-      //     status: true,
-      //     rel_id: "5db814ca5d0a533960ad5c6c",
-      //     weight: 0.1,
-      //     refPath: "res_company",
-      //     ward_id: "5dc237ded508de3c4c58cd28",
-      //     title: "SSG"
-      //   },
-      //   {
-      //     name: "company",
-      //     status: true,
-      //     rel_id: "5db814ca5d0a533960ad5c6c",
-      //     weight: 0.1,
-      //     refPath: "res_company",
-      //     ward_id: "5dc237ded508de3c4c58cd28",
-      //     title: "SSG1"
-      //   },
-      //   {
-      //     name: "company",
-      //     status: true,
-      //     rel_id: "5db814ca5d0a533960ad5c6c",
-      //     weight: 0.1,
-      //     refPath: "res_company",
-      //     ward_id: "5dc237ded508de3c4c58cd28",
-      //     title: "SSG2"
-      //   }
-      // ]
+      activeSuggestion: -1,
+      showSuggestions: false,
+      currentSuggestion: ""
     };
   }
 
@@ -52,7 +26,8 @@ export class App extends Component {
     var value = target.type === "checkbox" ? target.checked : target.value;
     this.setState(
       {
-        [name]: value
+        [name]: value,
+        showSuggestions: true,
       },
       () => {
         this.props.onSearchPost(this.state.keyword);
@@ -60,87 +35,42 @@ export class App extends Component {
     );
   };
 
-  onKeyDown = e => {
-    const { activeSuggestion } = this.state;
-    console.log(this.props.listSuggestion.length);
+  // onClickItem = () => {
 
+  // }
+
+  onKeyDown = e => {
+    let { activeSuggestion } = this.state;
     if (e.keyCode === 13) {
       document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
-    }
-    else if (e.keyCode === 38) {
+    } else if (e.keyCode === 38) {
       if (activeSuggestion === 0) {
         return;
       }
-      this.setState({ activeSuggestion: activeSuggestion - 1 });
-    }
-    else if (e.keyCode === 40) {
-      if (activeSuggestion - 1 === this.props.listSuggestion.length) {
+      this.setState({ activeSuggestion: activeSuggestion - 1, keyword: this.props.listSuggestion[activeSuggestion - 1].title});
+    } else if (e.keyCode === 40) {
+      if (activeSuggestion + 1 === this.props.listSuggestion.length) {
         return;
       } else if (this.state.keyword !== "") {
-        this.setState({ activeSuggestion: activeSuggestion + 1 });
+        this.setState({ activeSuggestion: activeSuggestion + 1, keyword: this.props.listSuggestion[activeSuggestion + 1].title});
       }
     }
   };
-  // handleEnter = event => {
-  //   const key = event.keyCode || event.which;
-  //   if (key === 13 && this.state.keyword !== "") {
-  //     document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
-  //   } else if (key) {
-  //     this.handleKeyPress(key);
-  //   }
-  // };
-
-  // handleKeyPress = (key, index) => {
-  //   if(key === 40){
-  //     return index++
-  //   } else if( key === 38) {
-  //     return index--
-  //   }
-  //   return index
-  // }
-
-  // renderSearchSuggestion = () => {
-  //   const listSuggestionPosts = this.props.listSuggestion;
-  //   console.log(listSuggestionPosts);
-  //   // const listSuggestionPosts = this.state.data;
-  //   return (
-  //     <ul id="autoComplete_results_list">
-  //       {listSuggestionPosts.length > 0
-  //         ? listSuggestionPosts.map((post, index) => {
-  //             return (
-  //               <Link
-  //                 to={`/posts?key=${this.state.keyword}&page=${this.props.page}`}
-  //               >
-  //                 <li
-  //                   className="row-item-suggestion-popup d-flex"
-  //                   style={{ cursor: "pointer" }}
-  //                   key={post.rel_id}
-  //                 >
-  //                   <img src="../../assets/img/SVG/search.svg" alt="/#" />
-  //                   <div className="ml-2">{post.title}</div>
-  //                 </li>
-  //               </Link>
-  //             );
-  //           })
-  //         : ""}
-  //     </ul>
-  //   );
-  // };
 
   render() {
     const {
       onKeyDown,
-      state: { activeSuggestion, keyword }
+      state: { activeSuggestion, keyword, showSuggestions }
     } = this;
     let suggestionsListComponent;
 
-    if (keyword) {
+    if (showSuggestions && keyword) {
       if (this.props.listSuggestion.length) {
         suggestionsListComponent = (
           <ul id="autoComplete_results_list">
             {this.props.listSuggestion.map((suggestion, index) => {
               let className;
-              if (index === activeSuggestion) {
+              if (index === activeSuggestion && showSuggestions) {
                 className = "active-suggestion";
               }
               return (
@@ -431,8 +361,8 @@ export class App extends Component {
                           onChange={this.onChange}
                           onKeyDown={onKeyDown}
                           autocomplete="off"
+                          value={this.state.keyword}
                         />
-                        {/* {this.renderSearchSuggestion()} */}
                         {suggestionsListComponent}
                       </div>
                     </div>
@@ -502,9 +432,12 @@ export class App extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state);
+
   return {
     listSuggestion: state.postReducer.searchSuggestion,
-    page: state.postReducer.pageNumber
+    page: state.postReducer.pageNumber,
+    valueSearch: state.postReducer.valueSearch
   };
 };
 
@@ -515,6 +448,9 @@ const mapDispathToProps = (dispatch, props) => {
     },
     onSearchPostByKeyWord: keyword => {
       dispatch(actSearchPostByKeyWordRequest(keyword));
+    },
+    onStoreValueSearch: values => {
+      dispatch(actStoreValueSearch(values));
     }
   };
 };

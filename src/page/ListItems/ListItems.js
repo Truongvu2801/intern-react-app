@@ -15,7 +15,8 @@ class ListItems extends Component {
       listPosts: [],
       currentPage: 1,
       postPerPage: 10,
-      totalPost: 1
+      totalPost: 1,
+      queryString: ''
     };
   }
 
@@ -30,7 +31,8 @@ class ListItems extends Component {
       this.props.onSearchPostByKeyWord(values.key, this.state.currentPage);
     }
     this.setState({
-      listPosts: this.props.listPosts
+      listPosts: this.props.listPosts,
+      queryString: values.key
     });
   };
 
@@ -60,6 +62,8 @@ class ListItems extends Component {
   }
 
   render() {
+    console.log(this.state.queryString);
+    
     return (
       <section className="section__result-pages">
         <div className="container-fluid result-pages__container">
@@ -86,6 +90,7 @@ class ListItems extends Component {
                           type="text"
                           placeholder="Search ..."
                           tabindex="1"
+                          value={this.state.queryString}
                         />
                       </div>
                     </div>
@@ -272,9 +277,12 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state);
+  
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
+    getValueSearch: state.postReducer.valueSearch
   };
 };
 
@@ -285,7 +293,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onCountTotalPosts: keyword => {
       dispatch(actCountAllPostsRequest(keyword));
-    }
+    },
   };
 };
 

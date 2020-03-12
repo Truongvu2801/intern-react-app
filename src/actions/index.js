@@ -82,3 +82,10 @@ export const actCountAllPosts = number => {
     number
   };
 };
+
+export const actStoreValueSearch = (values) => {
+  return {
+    type: Types.STORE_VALUE_SEARCH,
+    values
+  }
+}
