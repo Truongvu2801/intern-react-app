@@ -32,6 +32,8 @@ class ListItems extends Component {
     if (values) {
       this.props.onSearchPostByKeyWord(values.key, this.state.currentPage);
     }
+    // this.props.history.push(`page=${this.props.getPageSearch}`)
+
     this.setState({
       listPosts: this.props.listPosts,
       queryString: values.key
@@ -59,11 +61,27 @@ class ListItems extends Component {
         {
           currentPage: pageNumber
         },
-        () => 
-          this.getPostByKeyword(this.state.currentPage)
-        
+        () => this.getPostByKeyword(this.state.currentPage)
       );
     }
+  }
+
+  removeParam(parameter) {
+    var url = document.location.href;
+    var urlparts = url.split("?");
+
+    if (urlparts.length >= 2) {
+      var urlBase = urlparts.shift();
+      var queryString = urlparts.join("?");
+
+      var prefix = encodeURIComponent(parameter) + "=";
+      var pars = queryString.split(/[&;]/g);
+      for (var i = pars.length; i-- > 0; )
+        if (pars[i].lastIndexOf(prefix, 0) !== -1) pars.splice(i, 1);
+      url = urlBase + "?" + pars.join("&");
+      window.history.pushState("", document.title, url); // added this line to push the new url directly to url bar .
+    }
+    return url;
   }
 
   render() {
