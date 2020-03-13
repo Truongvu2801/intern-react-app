@@ -21,7 +21,6 @@ class Pagination extends Component {
   }
 
   setPage = async page => {
-    console.log("page ne: ", page);
     if (page !== "undefined") {
       this.setState({
         currentPage: page

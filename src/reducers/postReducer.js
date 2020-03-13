@@ -5,7 +5,7 @@ let initialState = {
   searchSuggestion: "",
   post: "",
   pageNumber: 1,
-  valueSearch: ""
+  pageSearch: ""
 };
 
 const postReducer = (state = initialState, action) => {
@@ -21,10 +21,10 @@ const postReducer = (state = initialState, action) => {
         ...state,
         totalPost: action.number
       };
-    case Types.STORE_VALUE_SEARCH:
+    case Types.STORE_PAGE_SEARCH:
       return {
         ...state,
-        valueSearch: action.values
+        pageSearch: action.page
       };
     default:
       return state;

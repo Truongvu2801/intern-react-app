@@ -83,9 +83,9 @@ export const actCountAllPosts = number => {
   };
 };
 
-export const actStoreValueSearch = (values) => {
+export const actStorePageSearch = (page) => {
   return {
-    type: Types.STORE_VALUE_SEARCH,
-    values
+    type: Types.STORE_PAGE_SEARCH,
+    page
   }
 }

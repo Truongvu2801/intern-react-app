@@ -4,31 +4,56 @@ import { Link } from "react-router-dom";
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest,
-  actStoreValueSearch
 } from "../../actions/index";
 import "./App.css";
 
 export class App extends Component {
   constructor(props) {
     super(props);
+    this.inputRef = React.createRef();
+    this.selection = {
+      start: false,
+      end: false
+    };
     this.state = {
       keyword: "",
-      activeSuggestion: -1,
+      activeSuggestion: 1,
       showSuggestions: false,
-      currentSuggestion: ""
+      currentSuggestion: "",
+      mouseOverValue: false,
+      // page: 1
     };
   }
 
+  // componentDidUpdate() {
+  //   console.log( this.inputRef.current);
+    
+  //   const { selectionStart, selectionEnd } = this.inputRef.current;
+  //   const update = (this.selection.start !== false && this.selection.start !== selectionStart)
+  //     || (this.selection.end !== false && this.selection.end !== selectionEnd);
+
+  //   if (update) {
+  //     this.inputRef.current.selectionStart = this.selection.start;
+  //     this.inputRef.current.selectionEnd = this.selection.end;
+  //   }
+  // }
+
+
   onChange = e => {
-    var target = e.target;
-    var name = target.name;
-    var value = target.type === "checkbox" ? target.checked : target.value;
+    const target = e.target;
+    const name = target.name;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    // const input = this.inputRef.current
+        // this.selection = {
+        //   start: input.selectionStart,
+        //   end: input.selectionEnd
+        // };
     this.setState(
       {
         [name]: value,
         showSuggestions: true
-      },
-      () => {
+      },() => {
+        
         this.props.onSearchPost(this.state.keyword);
       }
     );
@@ -37,14 +62,15 @@ export class App extends Component {
   onKeyDown = e => {
     let { activeSuggestion } = this.state;
     if (e.keyCode === 13) {
-      document.location.href = `/posts?key=${this.state.keyword}&page=${this.props.page}`;
+      // document.location.href = `/posts?key=${this.state.keyword}&page=${this.state.page}`;
+      this.props.history.push(`/posts?key=${this.state.keyword}`)
     } else if (e.keyCode === 38) {
-      if (activeSuggestion === 0) {
+      if (activeSuggestion < 0) {
         return;
       }
       this.setState({
         activeSuggestion: activeSuggestion - 1,
-        keyword: this.props.listSuggestion[activeSuggestion - 1].title
+        keyword: this.props.listSuggestion[activeSuggestion].title
       });
     } else if (e.keyCode === 40) {
       if (activeSuggestion + 1 === this.props.listSuggestion.length) {
@@ -56,6 +82,14 @@ export class App extends Component {
         });
       }
     }
+  };
+
+  onMouseOver = e => {
+    this.setState({
+      // activeSuggestion: 0,
+      keyword: e.currentTarget.innerText,
+      showSuggestions: true
+    });
   };
 
   render() {
@@ -83,6 +117,7 @@ export class App extends Component {
                   <li
                     className={`row-item-suggestion-popup d-flex ${className}`}
                     key={suggestion}
+                    onMouseOver={this.onMouseOver}
                   >
                     <img src="../../assets/img/SVG/search.svg" alt="/#" />
                     <div className="ml-2">{suggestion.title}</div>
@@ -365,6 +400,7 @@ export class App extends Component {
                           onKeyDown={onKeyDown}
                           autocomplete="off"
                           value={this.state.keyword}
+                          ref={this.inputRef}
                         />
                         {suggestionsListComponent}
                       </div>
@@ -450,9 +486,9 @@ const mapDispathToProps = (dispatch, props) => {
     onSearchPostByKeyWord: keyword => {
       dispatch(actSearchPostByKeyWordRequest(keyword));
     },
-    onStoreValueSearch: values => {
-      dispatch(actStoreValueSearch(values));
-    }
+    // onStoreValueSearch: values => {
+    //   dispatch(actStoreValueSearch(values));
+    // }
   };
 };
 

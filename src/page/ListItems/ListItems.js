@@ -5,7 +5,8 @@ import queryString from "query-string";
 import Item from "../Item/Item";
 import {
   actSearchPostByKeyWordRequest,
-  actCountAllPostsRequest
+  actCountAllPostsRequest,
+  actStorePageSearch
 } from "../../actions/index";
 import Pagination from "../Pagination/Pagination";
 class ListItems extends Component {
@@ -15,14 +16,15 @@ class ListItems extends Component {
       listPosts: [],
       currentPage: 1,
       postPerPage: 10,
-      totalPost: 1,
-      queryString: ''
+      totalPost: 1
+      // queryString: ""
     };
   }
 
   componentDidMount() {
     this.getPostByKeyword(this.state.currentPage);
     this.getTotalPost();
+    // this.props.onStorePageSearch()
   }
 
   getPostByKeyword = pageNumber => {
@@ -52,11 +54,14 @@ class ListItems extends Component {
 
   paginate(pageNumber) {
     if (pageNumber) {
+      this.props.onStorePageSearch(pageNumber);
       this.setState(
         {
           currentPage: pageNumber
         },
-        () => this.getPostByKeyword(this.state.currentPage)
+        () => 
+          this.getPostByKeyword(this.state.currentPage)
+        
       );
     }
   }
@@ -72,7 +77,10 @@ class ListItems extends Component {
                   <div className="rp-header-top__logo lh-top__logo">
                     <div className="header-top--logo lh-top--logo">
                       <a href="/">
-                        <img src="../../../assets/img/icon-asset.png" alt="/#" />
+                        <img
+                          src="../../../assets/img/icon-asset.png"
+                          alt="/#"
+                        />
                       </a>
                     </div>
                   </div>
@@ -275,10 +283,12 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state);
+
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
-    getValueSearch: state.postReducer.valueSearch
+    getPageSearch: state.postReducer.pageSearch
   };
 };
 
@@ -290,6 +300,9 @@ const mapDispatchToProps = (dispatch, props) => {
     onCountTotalPosts: keyword => {
       dispatch(actCountAllPostsRequest(keyword));
     },
+    onStorePageSearch: page => {
+      dispatch(actStorePageSearch(page));
+    }
   };
 };
 

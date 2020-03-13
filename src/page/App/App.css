@@ -1,8 +1,29 @@
-.active-suggestion {
+.active-suggestion,
+li:hover {
   /* color: red; */
   cursor: default;
   border-left: 1px solid rgb(223, 225, 229);
   border-right: 1px solid rgb(223, 225, 229);
   opacity: 0.85;
   background-color: #e8e8e8;
+}
+
+li {
+  cursor: default;
+  border-left: 1px solid rgb(223, 225, 229);
+  border-right: 1px solid rgb(223, 225, 229);
+  opacity: 0.85;
+}
+
+input {
+  padding-left: 48px;
+  border: 1px solid rgb(223, 225, 229);
+  opacity: 0.85;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 0px;
+}
+
+li div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
