@@ -6,6 +6,7 @@ import Item from "../Item/Item";
 import {
   actSearchPostByKeyWordRequest,
   actCountAllPostsRequest,
+  actStoreKeySearch,
   actStorePageSearch
 } from "../../actions/index";
 import Pagination from "../Pagination/Pagination";
@@ -16,28 +17,38 @@ class ListItems extends Component {
       listPosts: [],
       currentPage: 1,
       postPerPage: 10,
-      totalPost: 1
-      // queryString: ""
+      totalPost: 1,
+      keySearch: this.props.getKeySearch
     };
   }
 
   componentDidMount() {
     this.getPostByKeyword(this.state.currentPage);
     this.getTotalPost();
-    // this.props.onStorePageSearch()
   }
+
+  updateUrl = () => {
+    let url = window.location.href;
+    console.log(url);
+    if(this.props.getPageSearch > 1){
+      window.history.pushState({} , `posts?key=${this.state.keySearch}&page=1`, `posts?key=${this.state.keySearch}&page=${this.props.getPageSearch}`);
+      console.log(url);
+      
+    }
+  };
 
   getPostByKeyword = pageNumber => {
     const values = queryString.parse(this.props.location.search);
     if (values) {
       this.props.onSearchPostByKeyWord(values.key, this.state.currentPage);
     }
-    // this.props.history.push(`page=${this.props.getPageSearch}`)
-
-    this.setState({
-      listPosts: this.props.listPosts,
-      queryString: values.key
-    });
+    this.setState(
+      {
+        listPosts: this.props.listPosts,
+        queryString: values.key
+      },
+      () => this.updateUrl()
+    );
   };
 
   getTotalPost() {
@@ -64,24 +75,6 @@ class ListItems extends Component {
         () => this.getPostByKeyword(this.state.currentPage)
       );
     }
-  }
-
-  removeParam(parameter) {
-    var url = document.location.href;
-    var urlparts = url.split("?");
-
-    if (urlparts.length >= 2) {
-      var urlBase = urlparts.shift();
-      var queryString = urlparts.join("?");
-
-      var prefix = encodeURIComponent(parameter) + "=";
-      var pars = queryString.split(/[&;]/g);
-      for (var i = pars.length; i-- > 0; )
-        if (pars[i].lastIndexOf(prefix, 0) !== -1) pars.splice(i, 1);
-      url = urlBase + "?" + pars.join("&");
-      window.history.pushState("", document.title, url); // added this line to push the new url directly to url bar .
-    }
-    return url;
   }
 
   render() {
@@ -302,11 +295,12 @@ class ListItems extends Component {
 
 const mapStateToProps = state => {
   console.log(state);
-
+  
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
-    getPageSearch: state.postReducer.pageSearch
+    getPageSearch: state.postReducer.pageSearch,
+    getKeySearch: state.postReducer.keySearch
   };
 };
 
@@ -320,6 +314,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onStorePageSearch: page => {
       dispatch(actStorePageSearch(page));
+    },
+    onStoreKeySearch: key => {
+      dispatch(actStoreKeySearch(key))
     }
   };
 };

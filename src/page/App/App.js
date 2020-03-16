@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
   actSearchPostRequest,
   actSearchPostByKeyWordRequest,
+  actStoreKeySearch
 } from "../../actions/index";
 import "./App.css";
 
@@ -37,6 +38,9 @@ export class App extends Component {
   //     this.inputRef.current.selectionEnd = this.selection.end;
   //   }
   // }
+  componentDidUpdate(){
+    this.props.onStoreKeySearch(this.state.keyword)
+  }
 
 
   onChange = e => {
@@ -63,7 +67,7 @@ export class App extends Component {
     let { activeSuggestion } = this.state;
     if (e.keyCode === 13) {
       // document.location.href = `/posts?key=${this.state.keyword}&page=${this.state.page}`;
-      this.props.history.push(`/posts?key=${this.state.keyword}`)
+      this.props.history.push(`/posts?key=${this.state.keyword}&page=1`)
     } else if (e.keyCode === 38) {
       if (activeSuggestion < 0) {
         return;
@@ -486,9 +490,9 @@ const mapDispathToProps = (dispatch, props) => {
     onSearchPostByKeyWord: keyword => {
       dispatch(actSearchPostByKeyWordRequest(keyword));
     },
-    // onStoreValueSearch: values => {
-    //   dispatch(actStoreValueSearch(values));
-    // }
+    onStoreKeySearch: values => {
+      dispatch(actStoreKeySearch(values));
+    }
   };
 };
 

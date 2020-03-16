@@ -89,3 +89,10 @@ export const actStorePageSearch = (page) => {
     page
   }
 }
+
+export const actStoreKeySearch = (key) => {
+  return {
+    type: Types.STORE_KEY_SEARCH,
+    key
+  }
+}
