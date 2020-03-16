@@ -28,12 +28,12 @@ class ListItems extends Component {
   }
 
   updateUrl = () => {
-    let url = window.location.href;
-    console.log(url);
-    if(this.props.getPageSearch > 1){
-      window.history.pushState({} , `posts?key=${this.state.keySearch}&page=1`, `posts?key=${this.state.keySearch}&page=${this.props.getPageSearch}`);
-      console.log(url);
-      
+    if (this.props.getPageSearch >= 1) {
+      window.history.pushState(
+        {},
+        "",
+        `posts?key=${this.state.keySearch}&page=${this.props.getPageSearch}`
+      );
     }
   };
 
@@ -294,8 +294,6 @@ class ListItems extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
-  
   return {
     listPosts: state.postReducer.posts,
     getNumberPost: state.postReducer.totalPost,
@@ -316,7 +314,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(actStorePageSearch(page));
     },
     onStoreKeySearch: key => {
-      dispatch(actStoreKeySearch(key))
+      dispatch(actStoreKeySearch(key));
     }
   };
 };

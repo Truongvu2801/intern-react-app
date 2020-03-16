@@ -22,7 +22,6 @@ export class App extends Component {
       showSuggestions: false,
       currentSuggestion: "",
       mouseOverValue: false,
-      // page: 1
     };
   }
 
@@ -66,7 +65,6 @@ export class App extends Component {
   onKeyDown = e => {
     let { activeSuggestion } = this.state;
     if (e.keyCode === 13) {
-      // document.location.href = `/posts?key=${this.state.keyword}&page=${this.state.page}`;
       this.props.history.push(`/posts?key=${this.state.keyword}&page=1`)
     } else if (e.keyCode === 38) {
       if (activeSuggestion < 0) {
@@ -90,7 +88,6 @@ export class App extends Component {
 
   onMouseOver = e => {
     this.setState({
-      // activeSuggestion: 0,
       keyword: e.currentTarget.innerText,
       showSuggestions: true
     });

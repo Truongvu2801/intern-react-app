@@ -4,7 +4,7 @@ class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pager: {},
+      pager: {}
     };
   }
 
@@ -20,7 +20,7 @@ class Pagination extends Component {
     }
   }
 
-  setPage = async page => {
+  setPage = page => {
     if (page !== "undefined") {
       this.setState({
         currentPage: page
@@ -29,7 +29,7 @@ class Pagination extends Component {
 
     const { total, postPerPage } = this.props;
     const { currentPage } = this.props;
-
+    console.log(currentPage);
     let pager = this.state.pager;
 
     if (page < 1 || page > pager.totalPages) {
@@ -37,8 +37,7 @@ class Pagination extends Component {
     }
 
     // get new pager object for specified page
-    pager = await this.getPager(total, currentPage, postPerPage);
-
+    pager = this.getPager(total, currentPage, postPerPage);
     this.setState({ pager: pager }, () => this.props.paginate(page));
   };
 
@@ -56,7 +55,7 @@ class Pagination extends Component {
         startPage = 1;
         endPage = 10;
       } else if (currentPage + 4 >= totalPages) {
-        startPage = totalPages - 9;
+        startPage = totalPages - 8;
         endPage = totalPages;
       } else {
         startPage = currentPage - 5;
@@ -66,7 +65,6 @@ class Pagination extends Component {
 
     const startIndex = (currentPage - 1) * postPerPage;
     const endIndex = Math.min(startIndex + postPerPage - 1, total - 1);
-
     const pages = [...Array(endPage - startPage).keys()].map(
       i => startPage + i
     );
@@ -131,6 +129,7 @@ class Pagination extends Component {
   };
 
   render() {
+    console.log("state.pager: ", this.state.pager);
     return (
       <div className="rp-search-result__pagination">
         <div className="search-result__pagination-container container">
